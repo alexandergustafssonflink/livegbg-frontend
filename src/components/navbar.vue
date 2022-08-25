@@ -2,12 +2,12 @@
     <div class="navbar">
         <div class="inner-navbar">
             <div>
-                <h5>LIVE GBG</h5>
+                <h3>LIVE GBG</h3>
                 <router-link to="/">
-                    <q-btn class="q-ml-xl" size="18px" no-caps color="purple" flat outline  label="Konserter"></q-btn>
+                    <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Konserter"></q-btn>
                 </router-link>
                 <router-link to="/about">
-                    <q-btn class="q-ml-lg" size="18px" no-caps  color="purple" flat outline  label="Om oss"></q-btn>
+                    <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="Om oss"></q-btn>
                 </router-link>
             </div>
         </div>
@@ -31,9 +31,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+h3 {
+    color: whitesmoke;
+    font-weight: bold;
+}
     .navbar {
-        background-color: white;
+        background-color: #31087B;
         width: 100vw;
         display: flex;
         height: 80px;
@@ -57,6 +62,7 @@ export default {
 
     .navbar button {
         height: 100%;
+        font-weight: 700;
     }
     
     .navbar a {

@@ -29,13 +29,22 @@ export default {
 
 
 html, body {
-    background-color: #fafafa;
+    background-color: #100720
     
 }
+
 a {
     text-decoration: none;
     color: inherit;
 }
+
+/* .bg-yellow {
+    background-color: #FFC23C !important;
+} */
+
+/* .text-yellow {
+    background-color: #FFC23C !important;
+} */
 
 .page-wrapper {
     /* max-width: 1200px;
@@ -57,6 +66,7 @@ a {
 h5 {
     font-weight: 700 !important;
     opacity:0.9;
+    color: #31087B;
 }
 
 h3 {

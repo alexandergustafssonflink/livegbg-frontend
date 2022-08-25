@@ -7,13 +7,13 @@ import { Notify } from "quasar";
 export default {
     config: {
         brand: {
-            primary: '#3EA39F',
+            primary: '#FFC23C',
             red: '#E36565',
             blue: '#3E5669',
-            purple: "31087B",
-            pink: "FA2FB5",
-            yellow: "FFC23C",
-            black: "100720"
+            purple: "#31087B",
+            pink: "#FA2FB5",
+            hej: "#FFC23C",
+            black: "#100720"
         },
         extras: [
             'material-icons',

@@ -2,14 +2,17 @@
     <div>
         <h3>Alla evenemang</h3>
         <div class="event-wrapper">
-            <div v-for="(event, i) in events" :key="i" class="event-card">
+            <div v-if="isLoading">
+                <q-spinner size="large"></q-spinner>
+            </div>
+            <div v-else v-for="(event, i) in events" :key="i" class="event-card">
                 <div class="image-wrapper">
-                    <p class="date">{{event.date.split("T")[0]}}</p>
+                    <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
                     <img :src="event.imageUrl" alt="">
                 </div>
                 <div class="info-wrapper">
                     <h5>{{event.title}}</h5>
-                    <p><q-icon size="24px" name="place"></q-icon>{{event.place}}</p>
+                    <p></p>
                     <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn>
                 </div>
             </div>
@@ -26,13 +29,16 @@ export default {
     },
     methods: {
         async getEvents() {
+            this.isLoading = true;
              const { data } = await axios.get(process.env.VUE_APP_API_URL + "events")
              this.events = data[0].events;
+            this.isLoading = false;
         }
     },
     data() {
         return {
-            events: []
+            events: [],
+            isLoading: Boolean
         }
     },
     async created() {
@@ -49,6 +55,7 @@ export default {
 h3 {
     font-weight: bold;
     margin: 1em;
+    color: whitesmoke;
 }
 
 .event-wrapper {
@@ -60,10 +67,11 @@ h3 {
 .event-card {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     width: 400px;
-    height: 400px;
+    height: 340px;
     border-radius: 1em;
     margin: 2em;
     position: relative;
+    background-color: whitesmoke;
 }
 
 .image-wrapper {
@@ -89,15 +97,20 @@ h5 {
 .date {
     position: absolute;
     top: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     color:#FFC23C;
     width: 100%;
     padding: 0.5em;
-    text-align: right; 
+    display: flex;
+    justify-content: space-between;
     font-size: 16px;
     font-weight: bold;
 }
 
+.place {
+    display: flex;
+    align-items: center;
+}
 .info-wrapper {
     padding: 1em 2em;
 }    

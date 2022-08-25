@@ -126,4 +126,16 @@ h5 {
     bottom: 1em; 
 
 }
+
+@media only screen and (max-width: 800px) {
+    .event-card  {
+        width: 100%;
+        margin: 1em;
+
+    }
+
+    h3 {
+        margin: 0.5em;
+    }
+}
 </style>

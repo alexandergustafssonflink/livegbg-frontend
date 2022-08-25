@@ -12,6 +12,19 @@
             </div>
         </div>
     </div>
+    <div class="navbar-mobile">
+        <div class="hamburger" @click="navActive = !navActive" :class="navActive ? 'cross' : ''">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="navmenu" :class="navActive ? 'show' : 'hide'">
+            <div class="links">
+                <router-link @click="navActive = false" to="/"><h3>Konserter</h3></router-link>
+                <router-link @click="navActive = false" to="/about"><h3>Om oss</h3></router-link>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -24,6 +37,7 @@ export default {
     },
     data() {
         return {
+            navActive: false
         }
     },
     created() {
@@ -32,6 +46,15 @@ export default {
 </script>
 
 <style scoped>
+.links {
+    margin-top: 7em;
+
+}
+
+.links h3 {
+    color:  #31087B;
+    text-align: left;
+}
 
 h3 {
     color: whitesmoke;
@@ -73,4 +96,70 @@ h3 {
         background: #3EA39F !important;
         color: white !important;
     }
+
+@media only screen and (max-width: 820px) {
+    .navbar {
+        display: none;
+    }
+
+    .hamburger {
+        width: 4em;
+        position: fixed; 
+        top: 2em;
+        right: 2em;
+        z-index: 1000;
+        transition: 0.3s ease;
+    }
+
+    .cross div:nth-child(2) {
+        opacity: 0;
+    }
+      .cross div:nth-child(1) {
+        transform: translateY(10px) rotate(-45deg);
+    }
+
+         .cross div:nth-child(3) {
+        transform: translateY(-11px) rotate(45deg);
+    }
+
+    /* .cross :nth-child() */
+
+    .hamburger.cross div {
+        border: 2px solid #31087B !important;
+    }
+    .hamburger div {
+        transition: 0.3s ease;
+        border: 2px solid #FFC23C;
+        margin: 0.5em;
+    }
+
+    .navmenu {
+        width: 100vw;
+        height: 100vh;
+        background: #FFC23C;
+        position: fixed;
+        z-index: 900;
+        transition: 0.3s ease;
+    }
+
+    .hide{
+        right: -100vw;
+    }
+
+    .show {
+        right: 0px;
+    }
+
+    .navbar-mobile {
+        /* top: 0px;
+        left: 0px; */
+
+    }
+}
+
+@media only screen and (min-width: 820px) {
+    .navbar-mobile {
+        display: none;
+    }
+}
 </style>

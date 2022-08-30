@@ -6,9 +6,9 @@
                 <router-link to="/">
                     <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Konserter"></q-btn>
                 </router-link>
-                <router-link to="/about">
+                <!-- <router-link to="/about">
                     <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="Om oss"></q-btn>
-                </router-link>
+                </router-link> -->
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="navmenu" :class="navActive ? 'show' : 'hide'">
             <div class="links">
                 <router-link @click="navActive = false" to="/"><h3>Konserter</h3></router-link>
-                <router-link @click="navActive = false" to="/about"><h3>Om oss</h3></router-link>
+                <!-- <router-link @click="navActive = false" to="/about"><h3>Om oss</h3></router-link> -->
             </div>
         </div>
     </div>
@@ -54,6 +54,7 @@ export default {
 .links h3 {
     color:  #31087B;
     text-align: left;
+    margin-bottom: 1em;
 }
 
 h3 {
@@ -135,6 +136,7 @@ h3 {
 
     .navmenu {
         width: 100vw;
+        padding: 2em;
         height: 100vh;
         background: #FFC23C;
         position: fixed;

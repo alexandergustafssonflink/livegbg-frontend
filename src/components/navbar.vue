@@ -2,9 +2,9 @@
     <div class="navbar">
         <div class="inner-navbar">
             <div>
-                <h3>LIVE GBG</h3>
+                <h3 class="logo q-mr-xl"><q-icon size="36px" class="q-mr-sm" name="noise_aware"></q-icon>LIVE GBG</h3>
                 <router-link to="/">
-                    <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Konserter"></q-btn>
+                    <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Events"></q-btn>
                 </router-link>
                 <!-- <router-link to="/about">
                     <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="Om oss"></q-btn>
@@ -20,7 +20,7 @@
         </div>
         <div class="navmenu" :class="navActive ? 'show' : 'hide'">
             <div class="links">
-                <router-link @click="navActive = false" to="/"><h3>Konserter</h3></router-link>
+                <router-link @click="navActive = false" to="/"><h3>Events</h3></router-link>
                 <!-- <router-link @click="navActive = false" to="/about"><h3>Om oss</h3></router-link> -->
             </div>
         </div>
@@ -55,6 +55,11 @@ export default {
     color:  #31087B;
     text-align: left;
     margin-bottom: 1em;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
 }
 
 h3 {

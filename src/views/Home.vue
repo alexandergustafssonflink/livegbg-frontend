@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>Alla evenemang</h3>
+        <h3>Events</h3>
         <div class="event-wrapper">
             <div v-if="isLoading">
                 <q-spinner size="large"></q-spinner>
@@ -13,8 +13,8 @@
                 <div class="info-wrapper">
                     <h5>{{event.title}}</h5>
                     <p></p>
-                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Låtar</q-btn>
-                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Till eventet</q-btn>
+                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
                    
                     <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
                 </div>

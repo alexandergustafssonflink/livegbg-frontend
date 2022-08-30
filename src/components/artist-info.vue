@@ -3,7 +3,7 @@
         <q-btn flat @click="this.$emit('close')" size="xl" class="close-btn" icon="close"></q-btn>
         <div v-if="isLoading" class="loading">
             <q-spinner size="xl" ></q-spinner>
-            <h5>Laddar artistens låtar...</h5>
+            <h5>Searching for tracks...</h5>
         </div>
         <div v-else>
             <div v-if="tracks">

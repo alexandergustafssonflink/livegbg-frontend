@@ -78,7 +78,7 @@ h3 {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     width: 400px;
     height: 340px;
-    border-radius: 1em;
+    border-radius: 0.25em;
     margin: 2em;
     position: relative;
     background-color: whitesmoke;

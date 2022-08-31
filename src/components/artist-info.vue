@@ -27,6 +27,11 @@ import axios from "axios";
 
 export default {
     name: 'ArtistInfo',
+    watch: {
+        chosenArtist() {
+            this.getArtistInfo();
+        }
+    },
     components: {
     },
     methods: {
@@ -65,6 +70,23 @@ export default {
                     } 
                 } else if(this.chosenArtist.includes("#")) {
                     const splittedArtist = this.chosenArtist.split("#")[0];
+                    const options = {
+                    method: 'GET',
+                    url: 'https://shazam.p.rapidapi.com/search',
+                    params: {term: splittedArtist, locale: 'en-US', offset: '0', limit: '5'},
+                    headers: {
+                        'X-RapidAPI-Key': process.env.VUE_APP_SHAZAM_KEY,
+                        'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+                    }
+                    };
+
+                    const { data } = await axios.request(options);
+                    if(data.tracks) {
+                        this.tracks = data.tracks.hits
+                    } 
+                }
+                else if(this.chosenArtist.includes(" med ")) {
+                    const splittedArtist = this.chosenArtist.split(" med ")[0];
                     const options = {
                     method: 'GET',
                     url: 'https://shazam.p.rapidapi.com/search',
@@ -138,6 +160,10 @@ export default {
         text-align: left;
     }
 
+    .song:hover {
+        background: #9c27b0;
+    }
+
 
     .show {
         left: 0px;
@@ -152,6 +178,8 @@ export default {
     }
 
     .song {
+        transition: 0.2s ease;
+        padding: 0.25em;
         display: flex;
         justify-content: space-between;
     }

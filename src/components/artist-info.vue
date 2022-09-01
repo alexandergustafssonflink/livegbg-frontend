@@ -3,15 +3,21 @@
         <q-btn flat @click="this.$emit('close')" size="xl" class="close-btn" icon="close"></q-btn>
         <div v-if="isLoading" class="loading">
             <q-spinner size="xl" ></q-spinner>
-            <h5>Searching for tracks...</h5>
+            <h5>Searching for tracks on Shazam...</h5>
         </div>
         <div v-else>
-            <div v-if="tracks">
+            <div v-if="artistData">
                 <h3 class="q-mt-xl q-mb-lg">Top tracks</h3>
-                <div v-for="track in tracks" :key="track.key">
+                <div class="img-wrapper">
+                    <h5>{{artistData.artists.hits[0].artist.name}}</h5>
+                    <img :src="artistData.artists.hits[0].artist.avatar" alt="">
+                </div>
+                
+                <div v-for="track in artistData.tracks.hits" :key="track.key" class="song-wrapper">
                     <a :href="track.track.hub.providers[0].actions[0].uri" class="song">
                         <h5>{{track.track.title}}</h5>
-                        <q-btn dense no-caps flat :href="track.track.hub.providers[0].actions[0].uri" icon="play_circle"></q-btn>
+                        <q-icon name="play_circle" size="lg"></q-icon>
+                        <!-- <q-btn dense no-caps flat :href="track.track.hub.providers[0].actions[0].uri" icon="play_circle"></q-btn> -->
                     </a>
                 </div>
             </div>
@@ -48,9 +54,8 @@ export default {
             };
 
             const {data} = await axios.request(options);
-            console.log(data);
             if(data.tracks) {
-                this.tracks = data.tracks.hits
+                this.artistData = data;
             } else {
                 if(this.chosenArtist.includes("+")) {
                     const splittedArtist = this.chosenArtist.split("+")[0];
@@ -66,7 +71,7 @@ export default {
 
                     const { data } = await axios.request(options);
                     if(data.tracks) {
-                        this.tracks = data.tracks.hits
+                        this.artistData = data;
                     } 
                 } else if(this.chosenArtist.includes("#")) {
                     const splittedArtist = this.chosenArtist.split("#")[0];
@@ -82,7 +87,7 @@ export default {
 
                     const { data } = await axios.request(options);
                     if(data.tracks) {
-                        this.tracks = data.tracks.hits
+                        this.artistData = data;
                     } 
                 }
                 else if(this.chosenArtist.includes(" med ")) {
@@ -99,24 +104,11 @@ export default {
 
                     const { data } = await axios.request(options);
                     if(data.tracks) {
-                        this.tracks = data.tracks.hits
+                        this.artistData = data;
                     } 
                 }
             }
-            
-            
-            console.log(data);
-
             this.isLoading = false;
-
-            // axios.request(options).then(function (response) {
-            //     // this.artistInfo = response.data
-            //     let data = response.data.artists[0];
-
-            //     this.artistInfo = data;
-            // }).catch(function (error) {
-            //     console.error(error);
-            // });
         }
     },
     props: ["showArtistInfo", "chosenArtist"],
@@ -124,7 +116,7 @@ export default {
         return {
             events: [],
             isLoading: Boolean,
-            tracks: null
+            artistData: null
         }
     },
     async created() {
@@ -151,6 +143,10 @@ export default {
         right: 0;
     }
 
+    h3 {
+        font-weight: 700;
+    }
+
     h5 {
         color: #FFC23C;
         margin: 0.25em;
@@ -158,6 +154,10 @@ export default {
 
     .song h5 {
         text-align: left;
+        white-space: nowrap;
+        max-width: 275px;
+        overflow: hidden;
+        text-overflow: ellipsis
     }
 
     .song:hover {
@@ -177,10 +177,47 @@ export default {
         transition: 0.3s ease;
     }
 
+    .song-wrapper {
+        margin: 0 -2em 0 -2em;
+    }
+
     .song {
         transition: 0.2s ease;
-        padding: 0.25em;
+        padding: 0.5em 2em 0.25em 2em;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+    }
+
+    .song .q-icon {
+        color:#FFC23C;
+        opacity: 0.9;
+    }
+
+    .img-wrapper {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+    }
+
+    .img-wrapper h5 {
+        box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+        width: 100%;
+        position: absolute;
+        text-align: left;
+        color: #FFC23C;
+        top: 0;
+        background: rgba(0, 0, 0, 0.8);
+        margin: 0; 
+        padding: 0.5em;
+    }
+
+    .img-wrapper img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     }
 </style>

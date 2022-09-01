@@ -153,7 +153,7 @@ h5 {
 
 .artist-menu {
     height: 100vh;
-    width:20vw;
+    width:400px;
     position: fixed;
     transition: 0.3s ease;
     background: #31087B;

@@ -13,8 +13,8 @@
                     <img :src="artistData.artists.hits[0].artist.avatar" alt="">
                 </div>
                 
-                <div v-for="track in artistData.tracks.hits" :key="track.key" class="song-wrapper">
-                    <a :href="track.track.hub.providers[0].actions[0].uri" class="song">
+                <div v-for="(track, i) in artistData.tracks.hits" :key="track.key" class="song-wrapper">
+                    <a :href="track.track.hub.providers[0].actions[0].uri" class="song" v-if="i < 3">
                         <h5>{{track.track.title}}</h5>
                         <q-icon name="play_circle" size="lg"></q-icon>
                         <!-- <q-btn dense no-caps flat :href="track.track.hub.providers[0].actions[0].uri" icon="play_circle"></q-btn> -->

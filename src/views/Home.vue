@@ -1,24 +1,49 @@
 <template>
     <div>
-        <h3>Events</h3>
-        <div class="event-wrapper">
+        <div>
             <div v-if="isLoading">
-                <q-spinner size="large"></q-spinner>
+                <q-spinner class="q-mt-xl" size="large"></q-spinner>
             </div>
-            <div v-else v-for="(event, i) in events" :key="i" class="event-card">
-                <div class="image-wrapper">
-                    <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
-                    <img :src="event.imageUrl" alt="">
+            <div v-else>
+                <div class="events-today-wrapper">
+                    <h3 v-if="eventsToday.length">Events today</h3>
+                    <div class="events-today">
+                        <div class="event-card" v-for="(event, i) in eventsToday" :key="i" >
+                            <div class="image-wrapper">
+                                <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
+                                <img :src="event.imageUrl" alt="">
+                            </div>
+                            <div class="info-wrapper">
+                                <h5>{{event.title}}</h5>
+                                <p></p>
+                                    <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                                    <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                            
+                                <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-wrapper">
-                    <h5>{{event.title}}</h5>
-                    <p></p>
-                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
-                   
-                    <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
+                <h3>Upcoming events</h3>
+                <div class="event-wrapper">
+                    
+                    <div class="event-card" v-for="(event, i) in events" :key="i" >
+                        <div class="image-wrapper">
+                            <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
+                            <img :src="event.imageUrl" alt="">
+                        </div>
+                        <div class="info-wrapper">
+                            <h5>{{event.title}}</h5>
+                            <p></p>
+                                <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                                <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                        
+                            <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
+                        </div>
+                    </div>
                 </div>
             </div>
+            
             <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
                 <artist-info v-if="showArtistInfo" :chosen-artist="chosenArtist" :show-artist-info="showArtistInfo"  @close="showArtistInfo=false" />
             </div>
@@ -48,15 +73,20 @@ export default {
             events: [],
             isLoading: Boolean,
             showArtistInfo: false,
-            chosenArtist: ""
+            chosenArtist: "",
+            eventsToday: ""
         }
     },
     async created() {
         await this.getEvents();
-
         this.events.sort(function(a,b){
         return new Date(a.date) - new Date(b.date);
     });
+
+        const today = new Date().toJSON().split("T")[0];
+    
+        this.eventsToday = this.events.filter(event => event.date.split('T')[0] == today) 
+        this.events = this.events.filter(event => event.date.split('T')[0] !== today).filter(event => new Date(event.date).getTime() > new Date(today).getTime())
     }
 }
 </script>
@@ -72,6 +102,22 @@ h3 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.events-today {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.events-today .event-card {
+    width: 500px;
+    height: 440px;
+}
+
+.events-today .image-wrapper {
+    height: 250px;
 }
 
 .event-card {
@@ -173,6 +219,14 @@ h5 {
     }
 
 @media only screen and (max-width: 800px) {
+    .events-today .event-card {
+        width:100%;
+        height: 340px;
+    }
+
+    .events-today .image-wrapper {
+        height: 200px;
+    }
     .artist-menu {
         height: 100vh;
         width:100vw;
@@ -180,7 +234,10 @@ h5 {
     .event-card  {
         width: 100%;
         margin: 1em;
+    }
 
+    .events-today-wrapper h3 {
+        margin-top: 60px;
     }
 
     h3 {

@@ -2,13 +2,13 @@
     <div class="navbar">
         <div class="inner-navbar">
             <div>
-                <h3 class="logo q-mr-xl"><q-icon size="36px" class="q-mr-sm" name="noise_aware"></q-icon>LIVE GBG</h3>
+            <h3 class="logo q-mr-xl">LIVE GBG</h3>
                 <router-link to="/">
                     <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Events"></q-btn>
                 </router-link>
-                <!-- <router-link to="/about">
-                    <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="Om oss"></q-btn>
-                </router-link> -->
+                <router-link to="/about">
+                    <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="About"></q-btn>
+                </router-link>
             </div>
         </div>
     </div>
@@ -20,8 +20,8 @@
         </div>
         <div class="navmenu" :class="navActive ? 'show' : 'hide'">
             <div class="links">
-                <router-link @click="navActive = false" to="/"><h3>Events</h3></router-link>
-                <!-- <router-link @click="navActive = false" to="/about"><h3>Om oss</h3></router-link> -->
+                <router-link @click="navActive = false" to="/"><h3>events</h3></router-link>
+                <router-link @click="navActive = false" to="/about"><h3>about</h3></router-link>
             </div>
         </div>
     </div>
@@ -58,8 +58,8 @@ export default {
 }
 
 .logo {
-    display: flex;
-    align-items: center;
+    margin-top: 8px;
+    font-family: 'Teko', sans-serif;
 }
 
 h3 {

@@ -1,6 +1,7 @@
 <template>
-   <div>
-    <h1>Om oss</h1>
+    <div class="about">
+        <h3>Gothenburg has a great live scene and our mission is to make it a little bit more accessable</h3>
+        <h3 class="q-mt-xl">Contact: <a href="mailto:hello@livegbg.se">hello@livegbg.se</a></h3>
    </div>
 </template>
 
@@ -38,5 +39,22 @@ axios.request(options).then(function (response) {
 </script>
 
 <style>
+
+.about {
+    height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 1em;
+}
+h3 {
+    color: whitesmoke;
+    max-width: 640px;
+}
+
+h4 {
+    color: whitesmoke;
+}
    
 </style>

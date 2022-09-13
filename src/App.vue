@@ -19,6 +19,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +61,8 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  /* color: #2c3e50; */
+  color: whitesmoke
 }
 
 h5 {
@@ -71,6 +73,7 @@ h5 {
 
 h3 {
     margin: 0;
+    font-family: 'Teko', sans-serif;
 }
 
 .box {

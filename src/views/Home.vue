@@ -1,8 +1,8 @@
 <template>
     <div>
         <div>
-            <div v-if="isLoading">
-                <q-spinner class="q-mt-xl" size="large"></q-spinner>
+            <div v-if="isLoading" class="spinner-wrapper">
+                <q-spinner class="q-mt-xl" size="medium"></q-spinner>
             </div>
             <div v-else>
                 <div class="events-today-wrapper">
@@ -146,6 +146,13 @@ h5 {
     margin: 0;
     max-height: 2.8em;
     overflow: hidden;
+}
+
+.spinner-wrapper {
+    height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .buttons {

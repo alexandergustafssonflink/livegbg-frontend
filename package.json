@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "quasar": "^2.7.7",
     "vue": "^3.0.0",
+    "vue-analytics": "^5.22.1",
     "vue-router": "^4.1.4"
   },
   "devDependencies": {

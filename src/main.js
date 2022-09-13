@@ -3,9 +3,8 @@ import App from './App.vue'
 import quasarUserOptions from '../quasar-user-options'
 import { Quasar } from "quasar"
 import router from "./router/index.js";
-import VueAnalytics from 'vue-analytics';
+import VueGtag from "vue-gtag";
 
-createApp(App).use(router).use(VueAnalytics, {
-    id: 'G-W4SH1ZH8QD',
-    router
-}).use(Quasar, quasarUserOptions).mount('#app');
+createApp(App).use(router).use(VueGtag, {
+    config: { id: "G-W4SH1ZH8QD" }
+  }).use(Quasar, quasarUserOptions).mount('#app');

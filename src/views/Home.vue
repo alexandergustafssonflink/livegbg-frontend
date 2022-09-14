@@ -96,6 +96,7 @@ h3 {
     font-weight: bold;
     margin: 1em;
     color: whitesmoke;
+    text-align: center;
 }
 
 .event-wrapper {

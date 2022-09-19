@@ -146,10 +146,14 @@ export default {
                 });
                 return events;
             } else {
-                return this.allEvents;
+                let events = this.allEvents;
+                events.sort(function(a,b){
+                    return new Date(a.date) - new Date(b.date);
+                });
+                return events
                 // const today = new Date().toJSON().split("T")[0];
                 // let filtered = this.allEvents.filter(event => new Date(event.date).getTime() > new Date(today).getTime())
-                // filtered.sort(function(a,b){
+                // this.allEvents.sort(function(a,b){
                 //     return new Date(a.date) - new Date(b.date);
                 // });
                 // return filtered;

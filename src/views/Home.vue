@@ -43,8 +43,8 @@
                 </template>
             </q-input>
             <div class="mobile-filter-btns">
-                <q-btn no-caps class="clear-filter" :disable="!fromDate && !toDate && !place" label="Clear filter" @click="fromDate = ''; toDate=''; place=''" outline color="primary"></q-btn>
-                <q-btn class="results-btn" no-caps label="See results" :disable="!fromDate && !toDate && !place" @click="closeFilterMenu" color="primary"></q-btn>
+                <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Clear filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
+                <q-btn class="results-btn" no-caps label="See results" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
             </div>
         </div>
         <div>

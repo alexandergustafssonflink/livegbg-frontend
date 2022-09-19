@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
-            <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter=false"></q-btn>
+            <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
             <h5>Filter</h5>
             <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary">
                 <template v-slot:prepend>
@@ -18,9 +18,9 @@
             <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
             <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime">
                 <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
+                    <q-icon name="event" size="lg" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date v-model="dateFrom" mask="YYYY-MM-DD">
+                        <q-date dark v-model="dateFrom" mask="YYYY-MM-DD">
                         <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -31,9 +31,9 @@
             </q-input>
             <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime" >
                 <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
+                    <q-icon name="event" size="lg" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date v-model="dateTo" mask="YYYY-MM-DD">
+                        <q-date dark v-model="dateTo" mask="YYYY-MM-DD">
                         <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -44,7 +44,7 @@
             </q-input>
             <div class="mobile-filter-btns">
                 <q-btn no-caps class="clear-filter" :disable="!fromDate && !toDate && !place" label="Clear filter" @click="fromDate = ''; toDate=''; place=''" outline color="primary"></q-btn>
-                <q-btn class="results-btn" no-caps label="See results" @click="showFilter=false" color="primary"></q-btn>
+                <q-btn class="results-btn" no-caps label="See results" :disable="!fromDate && !toDate && !place" @click="closeFilterMenu" color="primary"></q-btn>
             </div>
         </div>
         <div>
@@ -52,7 +52,7 @@
                 <q-spinner class="q-mt-xl" size="medium"></q-spinner>
             </div>
             <div v-else>
-                <q-btn class="mobile-filter-btn" no-caps icon="settings" color="primary" @click="showFilter = true"></q-btn>
+                <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
                 <div class="events-today-wrapper">
                     <h3 v-if="eventsToday.length">Events today</h3>
                     <div class="events-today">
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <h3>Upcoming events</h3>
+                <h3 :class="!eventsToday.length ? 'only-upcoming' : ''">Upcoming events</h3>
                 <div class="event-wrapper">
                     <div class="event-card" v-for="(event, i) in events" :key="i" >
                         <div class="image-wrapper">
@@ -108,6 +108,10 @@ export default {
             const today = new Date().toJSON().split("T")[0];
             this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt")).filter(event => new Date(event.date).getTime() > new Date(today).getTime());
             this.isLoading = false;
+        },
+        closeFilterMenu() {
+            window.scrollTo(0,0);
+            this.showFilter = false;
         }
     },
     data() {
@@ -446,6 +450,10 @@ h5 {
     .filter label {
         width: 100%;
         margin-top: 1em;
+    }
+
+    .only-upcoming  {
+        margin-top: 70px;
     }
 }
 </style>

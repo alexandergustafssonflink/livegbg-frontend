@@ -105,7 +105,8 @@ export default {
         async getEvents() {
             this.isLoading = true;
             const { data } = await axios.get(process.env.VUE_APP_API_URL + "events")
-            this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt"));
+            const today = new Date().toJSON().split("T")[0];
+            this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt")).filter(event => new Date(event.date).getTime() > new Date(today).getTime());
             this.isLoading = false;
         }
     },
@@ -141,12 +142,13 @@ export default {
                 });
                 return events;
             } else {
-                const today = new Date().toJSON().split("T")[0];
-                let filtered = this.allEvents.filter(event => new Date(event.date).getTime() > new Date(today).getTime())
-                filtered.sort(function(a,b){
-                    return new Date(a.date) - new Date(b.date);
-                });
-                return filtered;
+                return this.allEvents;
+                // const today = new Date().toJSON().split("T")[0];
+                // let filtered = this.allEvents.filter(event => new Date(event.date).getTime() > new Date(today).getTime())
+                // filtered.sort(function(a,b){
+                //     return new Date(a.date) - new Date(b.date);
+                // });
+                // return filtered;
             }
         },
         eventsToday() {

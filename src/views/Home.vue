@@ -1,10 +1,58 @@
 <template>
     <div>
+        <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
+            <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter=false"></q-btn>
+            <h5>Filter</h5>
+            <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary">
+                <template v-slot:prepend>
+                    <q-icon color="primary" name="place" @click.stop.prevent />
+                </template>
+                <template v-slot:append>
+                    <q-icon v-if="place" name="close" @click.stop.prevent="place = ''" class="cursor-pointer" />
+                </template>
+                <!-- <template v-slot:hint>
+                Field hint
+                </template> -->
+            </q-select>
+            <!-- <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary" /> -->
+            <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
+            <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime">
+                <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="dateFrom" mask="YYYY-MM-DD">
+                        <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                        </q-date>
+                    </q-popup-proxy>
+                    </q-icon>
+                </template>
+            </q-input>
+            <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime" >
+                <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="dateTo" mask="YYYY-MM-DD">
+                        <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                        </q-date>
+                    </q-popup-proxy>
+                    </q-icon>
+                </template>
+            </q-input>
+            <div class="mobile-filter-btns">
+                <q-btn no-caps class="clear-filter" :disable="!fromDate && !toDate && !place" label="Clear filter" @click="fromDate = ''; toDate=''; place=''" outline color="primary"></q-btn>
+                <q-btn class="results-btn" no-caps label="See results" @click="showFilter=false" color="primary"></q-btn>
+            </div>
+        </div>
         <div>
             <div v-if="isLoading" class="spinner-wrapper">
                 <q-spinner class="q-mt-xl" size="medium"></q-spinner>
             </div>
             <div v-else>
+                <q-btn class="mobile-filter-btn" no-caps icon="settings" color="primary" @click="showFilter = true"></q-btn>
                 <div class="events-today-wrapper">
                     <h3 v-if="eventsToday.length">Events today</h3>
                     <div class="events-today">
@@ -15,18 +63,14 @@
                             </div>
                             <div class="info-wrapper">
                                 <h5>{{event.title}}</h5>
-                                <p></p>
-                                    <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                                    <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
-                            
-                                <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
+                                <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                                <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
                             </div>
                         </div>
                     </div>
                 </div>
                 <h3>Upcoming events</h3>
                 <div class="event-wrapper">
-                    
                     <div class="event-card" v-for="(event, i) in events" :key="i" >
                         <div class="image-wrapper">
                             <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
@@ -34,11 +78,8 @@
                         </div>
                         <div class="info-wrapper">
                             <h5>{{event.title}}</h5>
-                            <p></p>
-                                <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                                <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
-                        
-                            <!-- <q-btn color="purple" class="readmore-btn" no-caps :href="event.link">Läs mer</q-btn> -->
+                            <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                            <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
                         </div>
                     </div>
                 </div>
@@ -64,17 +105,57 @@ export default {
         async getEvents() {
             this.isLoading = true;
             const { data } = await axios.get(process.env.VUE_APP_API_URL + "events")
-            this.events = data[0].events;
+            this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt"));
             this.isLoading = false;
         }
     },
     data() {
         return {
-            events: [],
+            // events: [],
             isLoading: Boolean,
             showArtistInfo: false,
             chosenArtist: "",
-            eventsToday: ""
+            place: "",
+            dateFrom: "",
+            dateTo: "",
+            showFilter: false
+        }
+    },
+    computed: {
+        events () {
+            if(this.dateFrom || this.dateTo || this.place) {
+                const timestampFrom = this.dateFrom ? new Date(this.dateFrom).getTime() : 0;
+                const timestampTo = this.dateTo ? new Date(this.dateTo).getTime() : 1649808000000212;
+
+                let events = this.allEvents.filter(batch => {
+                    let timestamp = new Date(batch.date.split("T")[0]).getTime();
+                    if(timestamp > timestampFrom && timestamp < timestampTo) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                events = events.filter(event => event.place.includes(this.place));
+                events.sort(function(a,b){
+                    return new Date(a.date) - new Date(b.date);
+                });
+                return events;
+            } else {
+                const today = new Date().toJSON().split("T")[0];
+                let filtered = this.allEvents.filter(event => new Date(event.date).getTime() > new Date(today).getTime())
+                filtered.sort(function(a,b){
+                    return new Date(a.date) - new Date(b.date);
+                });
+                return filtered;
+            }
+        },
+        eventsToday() {
+            if(this.dateFrom || this.dateTo) {
+                return [];
+            } else {
+                const today = new Date().toJSON().split("T")[0];
+                return this.events.filter(event => event.date.split('T')[0] == today)
+            }
         }
     },
     async created() {
@@ -85,7 +166,7 @@ export default {
 
         const today = new Date().toJSON().split("T")[0];
     
-        this.eventsToday = this.events.filter(event => event.date.split('T')[0] == today) 
+        // this.eventsToday = this.events.filter(event => event.date.split('T')[0] == today) 
         this.events = this.events.filter(event => event.date.split('T')[0] !== today).filter(event => new Date(event.date).getTime() > new Date(today).getTime())
     }
 }
@@ -226,6 +307,48 @@ h5 {
         transition: 0.3 ease;
     }
 
+.filter {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.filter h5 {
+    color: whitesmoke;
+    margin-right: 1em;
+}
+
+.filter :deep(input) {
+    color: whitesmoke;
+}
+
+.filter :deep(select span) {
+    color: whitesmoke;
+}
+
+.search-date i {
+    color: #FFC23C;
+}
+
+.place-select {
+    width: 200px;
+}
+@media only screen and (min-width: 800px) {
+    .mobile-filter-btn {
+        display: none; 
+    }
+    .filter-close-btn {
+        display: none;
+    }
+    .results-btn {
+        display: none;
+    }
+
+    .clear-filter {
+        margin-left: 1em;
+    }
+}
+
 @media only screen and (max-width: 800px) {
     .events-today .event-card {
         width:100%;
@@ -250,6 +373,58 @@ h5 {
 
     h3 {
         margin: 0.5em;
+    }
+
+    .filter {
+        height: 100vh;
+        width: 100vw;
+        background-color: #100720;
+        justify-content: inherit; 
+        padding-top: 5em;
+        position: fixed;
+        top: 0;
+        z-index: 2000;
+        margin-top: 0;
+        flex-direction: column;
+        transition: 0.3s ease;
+    }
+
+    .filter .q-mr-md {
+        margin-right: 0;
+    }
+
+    .filter-close-btn {
+        top: 0em;
+        right: 0em;
+        position: absolute;
+    }
+
+    .mobile-filter-btn {
+        position: fixed;
+        bottom: 2em;
+        left: 2em;
+        z-index: 500;
+    }
+
+    .mobile-filter-btns {
+        margin-top: 2em;
+    }
+
+    .clear-filter {
+        margin-right: 0.25em;
+    }
+
+    .results-btn {
+        margin-left: 0.25em;
+    }
+
+    .show {
+        left: 0;
+    }
+
+    .hide {
+        transition: 0.3s ease;
+        left: -100vw;
     }
 }
 </style>

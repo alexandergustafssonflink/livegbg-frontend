@@ -107,6 +107,42 @@ export default {
                         this.artistData = data;
                     } 
                 }
+                else if(this.chosenArtist.includes(" och ")) {
+                    console.log(this.chosenArtist);
+                    const splittedArtist = this.chosenArtist.split(" och ")[0];
+                    const options = {
+                    method: 'GET',
+                    url: 'https://shazam.p.rapidapi.com/search',
+                    params: {term: splittedArtist, locale: 'en-US', offset: '0', limit: '5'},
+                    headers: {
+                        'X-RapidAPI-Key': process.env.VUE_APP_SHAZAM_KEY,
+                        'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+                    }
+                    };
+
+                    const { data } = await axios.request(options);
+                    if(data.tracks) {
+                        this.artistData = data;
+                    } 
+                }
+                else if(this.chosenArtist.includes("Nytt Datum - ")) {
+                    console.log(this.chosenArtist.split("Nytt Datum - "));
+                    const splittedArtist = this.chosenArtist.split("Nytt Datum - ")[1];
+                    const options = {
+                    method: 'GET',
+                    url: 'https://shazam.p.rapidapi.com/search',
+                    params: {term: splittedArtist, locale: 'en-US', offset: '0', limit: '5'},
+                    headers: {
+                        'X-RapidAPI-Key': process.env.VUE_APP_SHAZAM_KEY,
+                        'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+                    }
+                    };
+
+                    const { data } = await axios.request(options);
+                    if(data.tracks) {
+                        this.artistData = data;
+                    } 
+                }
             }
             this.isLoading = false;
         }

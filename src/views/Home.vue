@@ -387,6 +387,7 @@ h5 {
         margin-top: 0;
         flex-direction: column;
         transition: 0.3s ease;
+        padding: 5em 2em 2em 2em;
     }
 
     .filter .q-mr-md {
@@ -408,6 +409,9 @@ h5 {
 
     .mobile-filter-btns {
         margin-top: 2em;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
     }
 
     .clear-filter {
@@ -425,6 +429,21 @@ h5 {
     .hide {
         transition: 0.3s ease;
         left: -100vw;
+    }
+
+    .place-select {
+        width: 100%;
+    }
+
+    .filter h5 {
+        margin-right: 0;
+        font-size: 36px;
+        margin-bottom: 1em;
+    }
+
+    .filter label {
+        width: 100%;
+        margin-top: 1em;
     }
 }
 </style>

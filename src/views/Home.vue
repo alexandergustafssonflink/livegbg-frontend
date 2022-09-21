@@ -369,7 +369,7 @@ h5 {
         height: 200px;
     }
     .artist-menu {
-        min-height: -webkit-fill-available;
+        height: 100%;
         width:100vw;
     }
     .event-card  {
@@ -386,7 +386,7 @@ h5 {
     }
 
     .filter {
-        min-height: -webkit-fill-available;
+        height: 100%;
         width: 100vw;
         background-color: #100720;
         justify-content: inherit; 

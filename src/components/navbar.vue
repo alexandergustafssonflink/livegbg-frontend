@@ -142,7 +142,7 @@ h3 {
     .navmenu {
         width: 100vw;
         padding: 2em;
-        min-height: -webkit-fill-available;
+        height: 100%;
         background: #FFC23C;
         position: fixed;
         z-index: 900;

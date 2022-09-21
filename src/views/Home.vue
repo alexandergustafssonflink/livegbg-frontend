@@ -129,25 +129,25 @@ export default {
     },
     computed: {
         events () {
+            const today = new Date().toJSON().split("T")[0];
             if(this.dateFrom || this.dateTo || this.place) {
                 const timestampFrom = this.dateFrom ? new Date(this.dateFrom).getTime() : 0;
                 const timestampTo = this.dateTo ? new Date(this.dateTo).getTime() : 1649808000000212;
 
-                let events = this.allEvents.filter(batch => {
-                    let timestamp = new Date(batch.date.split("T")[0]).getTime();
+                let events = this.allEvents.filter(event => {
+                    let timestamp = new Date(event.date.split("T")[0]).getTime();
                     if(timestamp > timestampFrom && timestamp < timestampTo) {
                         return true;
                     } else {
                         return false;
                     }
                 });
-                events = events.filter(event => event.place.includes(this.place));
+                events = events.filter(event => event.place.includes(this.place)).filter(event => event.date.split('T')[0] !== today);
                 events.sort(function(a,b){
                     return new Date(a.date) - new Date(b.date);
                 });
                 return events;
             } else {
-                const today = new Date().toJSON().split("T")[0];
                 let events = this.allEvents.filter(event => event.date.split('T')[0] != today);
                 events.sort(function(a,b){
                     return new Date(a.date) - new Date(b.date);
@@ -156,11 +156,15 @@ export default {
             }
         },
         eventsToday() {
-            if(this.dateFrom !== "" || this.dateTo !== "" ) {
-            return []
+            const today = new Date().toJSON().split("T")[0];
+            let events =  this.allEvents.filter(event => event.date.split('T')[0] == today);
+            if(this.dateFrom !== "" || this.dateTo !== "" || this.place !== "" ) {
+                if(this.place) {
+                    return events.filter(event => event.place.includes(this.place));
+                }
+                return [];
             } else {
-                const today = new Date().toJSON().split("T")[0];
-                return this.allEvents.filter(event => event.date.split('T')[0] == today)
+                return events
             }
         }
     },
@@ -170,11 +174,11 @@ export default {
         return new Date(a.date) - new Date(b.date);
     });
 
-        const today = new Date().toJSON().split("T")[0];
-        console.log(typeof today);
+        // const today = new Date().toJSON().split("T")[0];
+        // console.log(typeof today);
     
-        this.eventsToday = this.allEvents.filter(event => event.date.split('T')[0] == today) 
-        this.events = this.allEvents.filter(event => event.date.split('T')[0] != today)
+        // this.eventsToday = this.allEvents.filter(event => event.date.split('T')[0] == today) 
+        // this.events = this.allEvents.filter(event => event.date.split('T')[0] != today)
     }
 }
 </script>

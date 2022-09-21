@@ -112,7 +112,7 @@ h3 {
         width: 4em;
         position: fixed; 
         top: 2em;
-        right: 2em;
+        right: 1em;
         z-index: 1000;
         transition: 0.3s ease;
     }
@@ -142,7 +142,7 @@ h3 {
     .navmenu {
         width: 100vw;
         padding: 2em;
-        height: 100vh;
+        height: 120vh;
         background: #FFC23C;
         position: fixed;
         z-index: 900;

@@ -106,7 +106,7 @@ export default {
             this.isLoading = true;
             const { data } = await axios.get(process.env.VUE_APP_API_URL + "events")
             const today = new Date().toJSON().split("T")[0];
-            this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt")).filter(event => new Date(event.date).getTime() > new Date(today).getTime());
+            this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt")).filter(event => new Date(event.date.split('T')[0]).getTime() >= new Date(today).getTime());
             this.isLoading = false;
         },
         closeFilterMenu() {
@@ -123,7 +123,8 @@ export default {
             place: "",
             dateFrom: "",
             dateTo: "",
-            showFilter: false
+            showFilter: false,
+            allEvents: []
         }
     },
     computed: {
@@ -146,25 +147,20 @@ export default {
                 });
                 return events;
             } else {
-                let events = this.allEvents;
+                const today = new Date().toJSON().split("T")[0];
+                let events = this.allEvents.filter(event => event.date.split('T')[0] != today);
                 events.sort(function(a,b){
                     return new Date(a.date) - new Date(b.date);
                 });
                 return events
-                // const today = new Date().toJSON().split("T")[0];
-                // let filtered = this.allEvents.filter(event => new Date(event.date).getTime() > new Date(today).getTime())
-                // this.allEvents.sort(function(a,b){
-                //     return new Date(a.date) - new Date(b.date);
-                // });
-                // return filtered;
             }
         },
         eventsToday() {
-            if(this.dateFrom || this.dateTo) {
-                return [];
+            if(this.dateFrom !== "" || this.dateTo !== "" ) {
+            return []
             } else {
                 const today = new Date().toJSON().split("T")[0];
-                return this.events.filter(event => event.date.split('T')[0] == today)
+                return this.allEvents.filter(event => event.date.split('T')[0] == today)
             }
         }
     },
@@ -175,9 +171,10 @@ export default {
     });
 
         const today = new Date().toJSON().split("T")[0];
+        console.log(typeof today);
     
-        // this.eventsToday = this.events.filter(event => event.date.split('T')[0] == today) 
-        this.events = this.events.filter(event => event.date.split('T')[0] !== today).filter(event => new Date(event.date).getTime() > new Date(today).getTime())
+        this.eventsToday = this.allEvents.filter(event => event.date.split('T')[0] == today) 
+        this.events = this.allEvents.filter(event => event.date.split('T')[0] != today)
     }
 }
 </script>

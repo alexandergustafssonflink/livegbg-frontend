@@ -43,14 +43,18 @@ export default {
     methods: {
         async getArtistInfo() {
             this.isLoading = true;
-             const { data } = await axios.get(process.env.VUE_APP_API_URL + "artist?artist="+ this.chosenArtist)
-             if(data[0].info) {
+            try {
+            const { data } = await axios.get(process.env.VUE_APP_API_URL + "artist?artist="+ this.chosenArtist)
+             if(data.length) {
                 this.artistData = data[0].info;
+                this.isLoading = false;
             } else {
                 this.artistData = null;
+                this.isLoading = false;
             }
-
-            this.isLoading = false;
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     props: ["showArtistInfo", "chosenArtist"],

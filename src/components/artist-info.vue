@@ -44,7 +44,18 @@ export default {
         async getArtistInfo() {
             this.isLoading = true;
             try {
-            const { data } = await axios.get(process.env.VUE_APP_API_URL + "artist?artist="+ this.chosenArtist)
+                const options = {
+                method: 'GET',
+                url: process.env.VUE_APP_API_URL + "artist",
+                params: {artist: this.chosenArtist, locale: 'en-US', offset: '0', limit: '5'},
+                // headers: {
+                //     'X-RapidAPI-Key': process.env.VUE_APP_SHAZAM_KEY,
+                //     'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+                // }
+                };
+
+            const { data } = await axios.request(options);
+            // const { data } = await axios.get(process.env.VUE_APP_API_URL + "artist?artist="+ this.chosenArtist)
              if(data.length) {
                 this.artistData = data[0].info;
                 this.isLoading = false;

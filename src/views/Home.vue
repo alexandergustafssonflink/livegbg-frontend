@@ -78,7 +78,7 @@
                         </div>
                         <div class="info-wrapper">
                             <h5>{{event.title}}</h5>
-                            <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                            <q-btn color="purple" v-if="!event.title.toLowerCase().includes('open stage') && !event.title.toLowerCase().includes('hängmattan') && !event.title.toLowerCase().includes('barnens ocean')  && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('poesi och prosa') && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('konsert')" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
                             <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
                         </div>
                     </div>

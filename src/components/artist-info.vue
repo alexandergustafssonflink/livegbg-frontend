@@ -88,6 +88,7 @@ export default {
         height: 100%;
         width: 100%;
         padding: 2em;
+        box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
     }
 
     .loading {

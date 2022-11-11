@@ -246,6 +246,7 @@ h5 {
     text-align: left;
     margin: 0;
     max-height: 2.8em;
+    max-width: 330px;
     overflow: hidden;
 }
 

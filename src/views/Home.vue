@@ -3,7 +3,7 @@
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
             <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
             <h5>Filter</h5>
-            <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary">
+            <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Place" color="primary">
                 <template v-slot:prepend>
                     <q-icon color="primary" name="place" @click.stop.prevent />
                 </template>

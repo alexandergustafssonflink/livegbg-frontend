@@ -49,7 +49,7 @@
         </div>
         <div>
             <div v-if="isLoading" class="spinner-wrapper">
-                <q-spinner class="q-mt-xl" size="medium"></q-spinner>
+                <q-spinner-audio color="primary" size="8em" />
             </div>
             <div v-else>
                 <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
@@ -246,12 +246,12 @@ h5 {
     text-align: left;
     margin: 0;
     max-height: 2.8em;
-    max-width: 330px;
+    max-width: 280px;
     overflow: hidden;
 }
 
 .spinner-wrapper {
-    height: 75vh;
+    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;

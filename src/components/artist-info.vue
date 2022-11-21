@@ -43,6 +43,7 @@ export default {
     methods: {
         async getArtistInfo() {
             this.isLoading = true;
+
             try {
                 const options = {
                 method: 'GET',
@@ -54,18 +55,24 @@ export default {
                 // }
                 };
 
+
+
             const { data } = await axios.request(options);
             // const { data } = await axios.get(process.env.VUE_APP_API_URL + "artist?artist="+ this.chosenArtist)
              if(data.length) {
                 this.artistData = data[0].info;
-                this.isLoading = false;
+                // this.isLoading = false;
             } else {
                 this.artistData = null;
-                this.isLoading = false;
+                // this.isLoading = false;
             }
             } catch (error) {
                 console.log(error);
             }
+
+        setTimeout(() => {
+            this.isLoading = false;
+        }, 1000)
         }
     },
     props: ["showArtistInfo", "chosenArtist"],

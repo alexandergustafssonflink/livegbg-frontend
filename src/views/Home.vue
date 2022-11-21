@@ -16,7 +16,7 @@
             </q-select>
             <!-- <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary" /> -->
             <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
-            <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime">
+            <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime (XXXX-XX-XX)">
                 <template v-slot:append>
                     <q-icon name="event" size="lg" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -29,7 +29,7 @@
                     </q-icon>
                 </template>
             </q-input>
-            <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime" >
+            <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime (XXXX-XX-XX)" >
                 <template v-slot:append>
                     <q-icon name="event" size="lg" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -468,6 +468,11 @@ h5 {
 
     .only-upcoming  {
         margin-top: 70px;
+    }
+
+    .q-date {
+        width: 90vw;
+        height: 80vh;
     }
 }
 </style>

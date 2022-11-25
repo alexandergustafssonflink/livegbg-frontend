@@ -54,7 +54,7 @@ export default {
 <style scoped>
 .links {
     margin-top: 7em;
-
+    z-index: 1000;
 }
 
 .links h3 {
@@ -73,12 +73,13 @@ export default {
 }
 
 .logo-small-wrapper {
+    bottom: -8vh;
     position: absolute;
-    top: 0px;
-    left: -170px;
-    height: 150vh;
-    width: 140vh;
+    right: -20vh;
+    height: 60vh;
+    width: 60vh;
     opacity: 0.6;
+    z-index: 100;
 }
 
 .logo-small-wrapper img {

@@ -75,10 +75,10 @@ export default {
 .logo-small-wrapper {
     position: absolute;
     top: 0px;
-    left: -400px;
+    left: -170px;
     height: 150vh;
-    width: 168vh;
-    opacity: 0.8;
+    width: 140vh;
+    opacity: 0.6;
 }
 
 .logo-small-wrapper img {

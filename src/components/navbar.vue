@@ -65,6 +65,7 @@ export default {
 
 .logo-wrapper {
     height: 95%;
+    padding: 0.25em 0;
 }
 
 .logo-wrapper img {
@@ -100,7 +101,7 @@ h3 {
         background-color: #31087B;
         width: 100vw;
         display: flex;
-        height: 135px;
+        height: 80px;
         justify-content: center;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
     }

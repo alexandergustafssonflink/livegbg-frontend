@@ -2,7 +2,7 @@
     <div>
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
                 <div class="search">
-                    <q-input v-model="search" label-color="primary" label="Event name" >
+                    <q-input dark v-model="search" label-color="primary" label="Search event" @blur="search == '' ? searchWord = '' : ''" >
                         <template v-slot:append>
                             <q-icon color="primary" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                         </template>
@@ -61,7 +61,7 @@
                 </div>
                 <div v-else class="wrapper">
                     <div class="search-mobile">
-                        <q-input v-model="search" label-color="primary" label="Search event" >
+                        <q-input v-model="search" dark color="primary" label-color="primary" label="Search event" @blur="search == '' ? searchWord = '' : ''" >
                             <template v-slot:append>
                                 <q-icon v-if="(search || searchWord)" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                             </template>

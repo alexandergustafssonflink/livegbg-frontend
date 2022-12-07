@@ -7,7 +7,7 @@
                             <q-icon color="primary" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                         </template>
                     </q-input>
-                    <q-btn :disable="!search" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                    <q-btn no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
                 </div>
                 <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
                 <h5>Filter</h5>
@@ -63,10 +63,10 @@
                     <div class="search-mobile">
                         <q-input v-model="search" label-color="primary" label="Search event" >
                             <template v-slot:append>
-                                <q-icon v-if="search" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
+                                <q-icon v-if="(search || searchWord)" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                             </template>
                         </q-input>
-                        <q-btn class="q-mt-md" :disable="!search" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                        <q-btn class="q-mt-md" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
                     </div>
                     <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
                     <div v-if="(eventsToday.length || events.length)">

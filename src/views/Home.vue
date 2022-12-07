@@ -1,94 +1,114 @@
 <template>
     <div>
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
-            <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
-            <h5>Filter</h5>
-            <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Place" color="primary">
-                <template v-slot:prepend>
-                    <q-icon color="primary" name="place" @click.stop.prevent />
-                </template>
-                <template v-slot:append>
-                    <q-icon v-if="place" name="close" @click.stop.prevent="place = ''" class="cursor-pointer" />
-                </template>
-                <!-- <template v-slot:hint>
-                Field hint
-                </template> -->
-            </q-select>
-            <!-- <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary" /> -->
-            <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
-            <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime (XXXX-XX-XX)">
-                <template v-slot:append>
-                    <q-icon name="event" size="lg" class="cursor-pointer">
-                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date dark v-model="dateFrom" mask="YYYY-MM-DD">
-                        <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="primary" flat />
-                        </div>
-                        </q-date>
-                    </q-popup-proxy>
-                    </q-icon>
-                </template>
-            </q-input>
-            <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime (XXXX-XX-XX)" >
-                <template v-slot:append>
-                    <q-icon name="event" size="lg" class="cursor-pointer">
-                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date dark v-model="dateTo" mask="YYYY-MM-DD">
-                        <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="primary" flat />
-                        </div>
-                        </q-date>
-                    </q-popup-proxy>
-                    </q-icon>
-                </template>
-            </q-input>
-            <div class="mobile-filter-btns">
-                <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Clear filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
-                <q-btn class="results-btn" no-caps label="See results" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
-            </div>
-        </div>
-        <div>
-            <div v-if="isLoading" class="spinner-wrapper">
-                <q-spinner-audio color="primary" size="8em" />
-            </div>
-            <div v-else>
-                <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
-                <div class="events-today-wrapper">
-                    <h3 v-if="eventsToday.length">Events today</h3>
-                    <div class="events-today">
-                        <div class="event-card" v-for="(event, i) in eventsToday" :key="i" >
-                            <div class="image-wrapper">
-                                <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
-                                <img :src="event.imageUrl" alt="">
+                <div class="search">
+                    <q-input v-model="search" label-color="primary" label="Event name" >
+                        <template v-slot:append>
+                            <q-icon color="primary" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
+                        </template>
+                    </q-input>
+                    <q-btn :disable="!search" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                </div>
+                <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
+                <h5>Filter</h5>
+                <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Place" color="primary">
+                    <template v-slot:prepend>
+                        <q-icon color="primary" name="place" @click.stop.prevent />
+                    </template>
+                    <template v-slot:append>
+                        <q-icon v-if="place" name="close" @click.stop.prevent="place = ''" class="cursor-pointer" />
+                    </template>
+                    <!-- <template v-slot:hint>
+                    Field hint
+                    </template> -->
+                </q-select>
+                <!-- <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary" /> -->
+                <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
+                <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime (XXXX-XX-XX)">
+                    <template v-slot:append>
+                        <q-icon name="event" size="lg" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-date dark v-model="dateFrom" mask="YYYY-MM-DD">
+                            <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
                             </div>
-                            <div class="info-wrapper">
-                                <h5>{{event.title}}</h5>
-                                <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                                <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                            </q-date>
+                        </q-popup-proxy>
+                        </q-icon>
+                    </template>
+                </q-input>
+                <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime (XXXX-XX-XX)" >
+                    <template v-slot:append>
+                        <q-icon name="event" size="lg" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-date dark v-model="dateTo" mask="YYYY-MM-DD">
+                            <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                            </div>
+                            </q-date>
+                        </q-popup-proxy>
+                        </q-icon>
+                    </template>
+                </q-input>
+                <div class="mobile-filter-btns">
+                    <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Clear filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
+                    <q-btn class="results-btn" no-caps label="See results" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
+                </div>
+            </div>
+            <div>
+                <div v-if="isLoading" class="spinner-wrapper">
+                    <q-spinner-audio color="primary" size="8em" />
+                </div>
+                <div v-else class="wrapper">
+                    <div class="search-mobile">
+                        <q-input v-model="search" label-color="primary" label="Search event" >
+                            <template v-slot:append>
+                                <q-icon v-if="search" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
+                            </template>
+                        </q-input>
+                        <q-btn class="q-mt-md" :disable="!search" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                    </div>
+                    <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
+                    <div v-if="(eventsToday.length || events.length)">
+                        <div class="events-today-wrapper">
+                            <h3 v-if="eventsToday.length">Events today</h3>
+                            <div class="events-today">
+                                <div class="event-card" v-for="(event, i) in eventsToday" :key="i" >
+                                    <div class="image-wrapper">
+                                        <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
+                                        <img :src="event.imageUrl" alt="">
+                                    </div>
+                                    <div class="info-wrapper">
+                                        <h5>{{event.title}}</h5>
+                                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 v-if="events.length" :class="!eventsToday.length ? 'only-upcoming' : ''">Upcoming events</h3>
+                        <div class="event-wrapper">
+                            <div class="event-card" v-for="(event, i) in events" :key="i" >
+                                <div class="image-wrapper">
+                                    <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
+                                    <img :src="event.imageUrl" alt="">
+                                </div>
+                                <div class="info-wrapper">
+                                    <h5>{{event.title}}</h5>
+                                    <q-btn color="purple" v-if="!event.title.toLowerCase().includes('open stage') && !event.title.toLowerCase().includes('hängmattan') && !event.title.toLowerCase().includes('barnens ocean')  && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('poesi och prosa') && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('konsert')" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
+                                    <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <h3 :class="!eventsToday.length ? 'only-upcoming' : ''">Upcoming events</h3>
-                <div class="event-wrapper">
-                    <div class="event-card" v-for="(event, i) in events" :key="i" >
-                        <div class="image-wrapper">
-                            <p class="date"><span class="place"> <q-icon size="24px" class="q-mr-sm" name="place"></q-icon>{{event.place}}</span><span>{{event.date.split("T")[0]}}</span></p>
-                            <img :src="event.imageUrl" alt="">
-                        </div>
-                        <div class="info-wrapper">
-                            <h5>{{event.title}}</h5>
-                            <q-btn color="purple" v-if="!event.title.toLowerCase().includes('open stage') && !event.title.toLowerCase().includes('hängmattan') && !event.title.toLowerCase().includes('barnens ocean')  && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('poesi och prosa') && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('konsert')" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                            <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
-                        </div>
+                    <div v-else class="no-events">
+                        <h3>No events found</h3>
                     </div>
+                </div>  
+                <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
+                    <artist-info v-if="showArtistInfo" :chosen-artist="chosenArtist" :show-artist-info="showArtistInfo"  @close="showArtistInfo=false" />
                 </div>
             </div>
-            
-            <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
-                <artist-info v-if="showArtistInfo" :chosen-artist="chosenArtist" :show-artist-info="showArtistInfo"  @close="showArtistInfo=false" />
-            </div>
-        </div>
    </div>
 </template>
 
@@ -120,6 +140,8 @@ export default {
             isLoading: Boolean,
             showArtistInfo: false,
             chosenArtist: "",
+            search: "",
+            searchWord: "",
             place: "",
             dateFrom: "",
             dateTo: "",
@@ -130,7 +152,7 @@ export default {
     computed: {
         events () {
             const today = new Date().toJSON().split("T")[0];
-            if(this.dateFrom || this.dateTo || this.place) {
+            if(this.dateFrom || this.dateTo || this.place || this.searchWord) {
                 const timestampFrom = this.dateFrom ? new Date(this.dateFrom).getTime() : 0;
                 const timestampTo = this.dateTo ? new Date(this.dateTo).getTime() : 1649808000000212;
 
@@ -143,6 +165,7 @@ export default {
                     }
                 });
                 events = events.filter(event => event.place.includes(this.place)).filter(event => event.date.split('T')[0] !== today);
+                events = events.filter(event => event.title.toLowerCase().includes(this.searchWord.toLowerCase()))
                 events.sort(function(a,b){
                     return new Date(a.date) - new Date(b.date);
                 });
@@ -158,7 +181,7 @@ export default {
         eventsToday() {
             const today = new Date().toJSON().split("T")[0];
             let events =  this.allEvents.filter(event => event.date.split('T')[0] == today);
-            if(this.dateFrom !== "" || this.dateTo !== "" || this.place !== "" ) {
+            if(this.dateFrom !== "" || this.dateTo !== "" || this.place !== "" || this.searchWord !== "" ) {
                 const timestampFrom = this.dateFrom ? new Date(this.dateFrom).getTime() : 0;
                 const timestampTo = this.dateTo ? new Date(this.dateTo).getTime() : 1649808000000212;
                 let events = this.allEvents.filter(event => {
@@ -170,6 +193,7 @@ export default {
                     }
                 });
                 events = events.filter(event => event.place.includes(this.place)).filter(event => event.date.split('T')[0] === today);
+                events = events.filter(event => event.title.toLowerCase().includes(this.searchWord.toLowerCase()))
                 return events
             } else {
                 return events;
@@ -327,11 +351,25 @@ h5 {
         transition: 0.3 ease;
     }
 
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: solid 3px whitesmoke;
+    padding-right: 3em;
+    margin-right: 3em;
+}
+
+.search .q-btn {
+    margin-left: 1em;
+}
+
 .filter {
     justify-content: center;
     display: flex;
     align-items: center;
 }
+
 
 .filter h5 {
     color: whitesmoke;
@@ -367,9 +405,50 @@ h5 {
     .clear-filter {
         margin-left: 1em;
     }
+
+    .search-mobile {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 800px) {
+    .search {
+        display: none;
+    }
+
+    .search-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        margin: 1em;
+        margin-top: 5em;
+    }
+
+    .no-events {
+        width: 100%;
+    }
+
+    .wrapper {
+        width: 100vw;
+    }
+
+    .search-mobile :deep(input) {
+        color: whitesmoke;
+    }
+
+    .search-mobile :deep(select span) {
+        color: whitesmoke;
+    }
+
+ 
+    .search-mobile label {
+        width: 100%;
+    }
+
+    .search-mobile .q-btn {
+        width: 100%;
+    }
     .events-today .event-card {
         width:100%;
         height: 340px;
@@ -387,9 +466,9 @@ h5 {
         margin: 1em;
     }
 
-    .events-today-wrapper h3 {
-        margin-top: 60px;
-    }
+    /* .events-today-wrapper h3 {
+        margin-top: 2em;
+    } */
 
     h3 {
         margin: 0.5em;
@@ -465,10 +544,10 @@ h5 {
         width: 100%;
         margin-top: 1em;
     }
-
+/* 
     .only-upcoming  {
         margin-top: 70px;
-    }
+    } */
 
     .q-date {
         width: 90vw;

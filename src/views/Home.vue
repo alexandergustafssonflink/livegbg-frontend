@@ -1,17 +1,18 @@
 <template>
     <div>
+        <h1 class="title-header">Livemusik i Göteborg - samlat på ett ställe</h1>
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
                 <div class="search">
-                    <q-input dark v-model="search" label-color="primary" label="Search event" @blur="search == '' ? searchWord = '' : ''" >
+                    <q-input dark v-model="search" label-color="primary" label="Sök event" @blur="search == '' ? searchWord = '' : ''" >
                         <template v-slot:append>
                             <q-icon color="primary" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                         </template>
                     </q-input>
-                    <q-btn no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                    <q-btn no-caps label="Sök" @click="(searchWord = search)" outline color="primary"></q-btn>
                 </div>
                 <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
                 <h5>Filter</h5>
-                <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Place" color="primary">
+                <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Plats" color="primary">
                     <template v-slot:prepend>
                         <q-icon color="primary" name="place" @click.stop.prevent />
                     </template>
@@ -24,7 +25,7 @@
                 </q-select>
                 <!-- <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti']" label="Place" color="primary" /> -->
                 <!-- <q-input label="Place" label-color="primary" v-model="place"/> -->
-                <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Date from" placeholder="Anytime (XXXX-XX-XX)">
+                <q-input v-model="dateFrom" class="q-mr-md search-date" color="primary" label-color="primary" label="Datum från" placeholder="Anytime (XXXX-XX-XX)">
                     <template v-slot:append>
                         <q-icon name="event" size="lg" class="cursor-pointer">
                         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -37,7 +38,7 @@
                         </q-icon>
                     </template>
                 </q-input>
-                <q-input v-model="dateTo" class="search-date" label-color="primary" label="Date to" placeholder="Anytime (XXXX-XX-XX)" >
+                <q-input v-model="dateTo" class="search-date" label-color="primary" label="Datum till" placeholder="Anytime (XXXX-XX-XX)" >
                     <template v-slot:append>
                         <q-icon name="event" size="lg" class="cursor-pointer">
                         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -51,7 +52,7 @@
                     </template>
                 </q-input>
                 <div class="mobile-filter-btns">
-                    <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Clear filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
+                    <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Rensa filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
                     <q-btn class="results-btn" no-caps label="See results" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
                 </div>
             </div>
@@ -61,7 +62,7 @@
                 </div>
                 <div v-else class="wrapper">
                     <div class="search-mobile">
-                        <q-input v-model="search" dark color="primary" label-color="primary" label="Search event" @blur="search == '' ? searchWord = '' : ''" >
+                        <q-input v-model="search" dark color="primary" label-color="primary" label="Sök event" @blur="search == '' ? searchWord = '' : ''" >
                             <template v-slot:append>
                                 <q-icon v-if="(search || searchWord)" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                             </template>
@@ -71,7 +72,7 @@
                     <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
                     <div v-if="(eventsToday.length || events.length)">
                         <div class="events-today-wrapper">
-                            <h3 v-if="eventsToday.length">Events today</h3>
+                            <h3 v-if="eventsToday.length">Evenemang idag</h3>
                             <div class="events-today">
                                 <div class="event-card" v-for="(event, i) in eventsToday" :key="i" >
                                     <div class="image-wrapper">
@@ -80,13 +81,13 @@
                                     </div>
                                     <div class="info-wrapper">
                                         <h5>{{event.title}}</h5>
-                                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                                        <q-btn color="purple" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Sök låtar</q-btn>
+                                        <q-btn color="purple" class="event-btn" no-caps :href="event.link">Gå till event</q-btn>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h3 v-if="events.length" :class="!eventsToday.length ? 'only-upcoming' : ''">Upcoming events</h3>
+                        <h3 v-if="events.length" :class="!eventsToday.length ? 'only-upcoming' : ''">Kommande evenemang</h3>
                         <div class="event-wrapper">
                             <div class="event-card" v-for="(event, i) in events" :key="i" >
                                 <div class="image-wrapper">
@@ -95,14 +96,14 @@
                                 </div>
                                 <div class="info-wrapper">
                                     <h5>{{event.title}}</h5>
-                                    <q-btn color="purple" v-if="!event.title.toLowerCase().includes('open stage') && !event.title.toLowerCase().includes('hängmattan') && !event.title.toLowerCase().includes('barnens ocean')  && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('poesi och prosa') && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('konsert')" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Search tracks</q-btn>
-                                    <q-btn color="purple" class="event-btn" no-caps :href="event.link">Go to event</q-btn>
+                                    <q-btn color="purple" v-if="!event.title.toLowerCase().includes('open stage') && !event.title.toLowerCase().includes('hängmattan') && !event.title.toLowerCase().includes('barnens ocean')  && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('poesi och prosa') && !event.title.toLowerCase().includes('barnmattan') && !event.title.toLowerCase().includes('konsert')" class="info-btn" outline no-caps @click="showArtistInfo = true; chosenArtist=event.title">Sök låtar</q-btn>
+                                    <q-btn color="purple" class="event-btn" no-caps :href="event.link">Gå till event</q-btn>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div v-else class="no-events">
-                        <h3>No events found</h3>
+                        <h3>Inga evenemang hittades</h3>
                     </div>
                 </div>  
                 <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
@@ -216,6 +217,12 @@ export default {
 </script>
 
 <style scoped>
+
+h1 {
+    font-weight: bold;
+    font-size: 36px;
+    color: whitesmoke;
+}
 h3 {
     font-weight: bold;
     margin: 1em;
@@ -412,6 +419,12 @@ h5 {
 }
 
 @media only screen and (max-width: 800px) {
+    .title-header {
+        line-height: 1em; 
+        margin-top: 2em;
+        margin-bottom: -1em;
+    }
+
     .search {
         display: none;
     }

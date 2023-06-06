@@ -1,7 +1,7 @@
 <template>
     <div class="about">
-        <h3>Gothenburg has a great live scene and our mission is to make it a little bit more accessible</h3>
-        <h3 class="q-mt-xl">Contact: <a href="mailto:hello@livegbg.se">hello@livegbg.se</a></h3>
+        <h3>Göteborg har en fantastisk livescene och vårt uppdrag är att göra den lite mer tillgänglig.</h3>
+        <h3 class="q-mt-xl">Kontakt: <a href="mailto:hello@livegbg.se">hello@livegbg.se</a></h3>
    </div>
 </template>
 

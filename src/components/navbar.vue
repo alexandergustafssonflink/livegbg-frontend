@@ -7,10 +7,10 @@
                 <img src="@/assets/logo.png" alt="" />
             </div>
                 <router-link to="/">
-                    <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Events"></q-btn>
+                    <q-btn class="q-ml-xl" size="24px" no-caps color="primary" flat outlined  label="Event"></q-btn>
                 </router-link>
                 <router-link to="/about">
-                    <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="About"></q-btn>
+                    <q-btn class="q-ml-lg" size="24px" no-caps  color="primary" flat outlined  label="Om oss"></q-btn>
                 </router-link>
             </div>
         </div>
@@ -23,8 +23,8 @@
         </div>
         <div class="navmenu" :class="navActive ? 'show' : 'hide'">
             <div class="links">
-                <router-link @click="navActive = false" to="/"><h3>events</h3></router-link>
-                <router-link @click="navActive = false" to="/about"><h3>about</h3></router-link>
+                <router-link @click="navActive = false" to="/"><h3>event</h3></router-link>
+                <router-link @click="navActive = false" to="/about"><h3>om oss</h3></router-link>
             </div>
             <div class="logo-small-wrapper">
                 <img src="@/assets/logo-small.png" alt="" />

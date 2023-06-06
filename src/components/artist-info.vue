@@ -3,11 +3,11 @@
         <q-btn flat @click="this.$emit('close')" size="xl" class="close-btn" icon="close"></q-btn>
         <div v-if="isLoading" class="loading">
             <q-spinner size="xl" ></q-spinner>
-            <h5>Searching for tracks on Shazam...</h5>
+            <h5>Söker efter låtar...</h5>
         </div>
         <div v-else>
             <div v-if="artistData">
-                <h3 class="q-mt-xl q-mb-lg">Top tracks</h3>
+                <h3 class="q-mt-xl q-mb-lg">Låtar</h3>
                 <div class="img-wrapper">
                     <h5>{{artistData.artists.hits[0].artist.name}}</h5>
                     <img :src="artistData.artists.hits[0].artist.avatar" alt="">
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div v-else>
-                <h3 class="q-mt-xl q-mb-lg">No tracks found</h3>
+                <h3 class="q-mt-xl q-mb-lg">Hittade inga låtar :(</h3>
             </div>
         </div>
    </div>

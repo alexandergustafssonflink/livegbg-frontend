@@ -53,7 +53,7 @@
                 </q-input>
                 <div class="mobile-filter-btns">
                     <q-btn no-caps class="clear-filter" :disable="!dateFrom && !dateTo && !place" label="Rensa filter" @click="dateFrom = ''; dateTo=''; place=''" outline color="primary"></q-btn>
-                    <q-btn class="results-btn" no-caps label="See results" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
+                    <q-btn class="results-btn" no-caps label="Visa resultat" :disable="!dateFrom && !dateTo && !place" @click="closeFilterMenu" color="primary"></q-btn>
                 </div>
             </div>
             <div>
@@ -67,7 +67,7 @@
                                 <q-icon v-if="(search || searchWord)" color="primary" size="lg" name="close" @click="search = ''; searchWord = ''" class="cursor-pointer" />
                             </template>
                         </q-input>
-                        <q-btn class="q-mt-md" no-caps label="Search" @click="(searchWord = search)" outline color="primary"></q-btn>
+                        <q-btn class="q-mt-md" no-caps label="Sök" @click="(searchWord = search)" outline color="primary"></q-btn>
                     </div>
                     <q-btn class="mobile-filter-btn" no-caps icon="filter_alt" color="primary" @click="showFilter = true"></q-btn>
                     <div v-if="(eventsToday.length || events.length)">

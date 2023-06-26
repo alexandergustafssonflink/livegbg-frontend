@@ -1,6 +1,9 @@
 <template>
     <div>
+        
         <h1 class="title-header">Livemusik i Göteborg - samlat på ett ställe</h1>
+        <p class="last-fetch" v-if="!isLoading">Senast uppdaterad: {{ lastFetch }}</p>
+        
         <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
                 <div class="search">
                     <q-input dark v-model="search" label-color="primary" label="Sök event" @blur="search == '' ? searchWord = '' : ''" >
@@ -12,7 +15,7 @@
                 </div>
                 <q-btn icon="close" size="xl" flat class="filter-close-btn" @click="showFilter = false"></q-btn>
                 <h5>Filter</h5>
-                <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn']" label="Plats" color="primary">
+                <q-select dark class="place-select q-mr-md" v-model="place" :options="['Pustervik', 'Oceanen', 'Musikens hus', 'Nefertiti', 'Valand', 'Trägårn', 'Skeppet']" label="Plats" color="primary">
                     <template v-slot:prepend>
                         <q-icon color="primary" name="place" @click.stop.prevent />
                     </template>
@@ -128,6 +131,7 @@ export default {
             const { data } = await axios.get(process.env.VUE_APP_API_URL + "events")
             const today = new Date().toJSON().split("T")[0];
             this.allEvents = data[0].events.filter(event => !event.title.toLowerCase().includes("inställt")).filter(event => new Date(event.date.split('T')[0]).getTime() >= new Date(today).getTime());
+            this.lastFetch = data[0].date.split("T")[0] + " " + data[0].date.split("T")[1].split(".")[0] 
             this.isLoading = false;
         },
         closeFilterMenu() {
@@ -147,7 +151,8 @@ export default {
             dateFrom: "",
             dateTo: "",
             showFilter: false,
-            allEvents: []
+            allEvents: [],
+            lastFetch: "",
         }
     },
     computed: {
@@ -398,7 +403,18 @@ h5 {
 .place-select {
     width: 200px;
 }
+
+.last-fetch {
+    opacity: 0.4;
+    
+}
 @media only screen and (min-width: 800px) {
+    .title-header {
+        margin-bottom: 0;
+    }
+    .last-fetch {
+        margin-top: 0;
+    }
     .mobile-filter-btn {
         display: none; 
     }
@@ -422,7 +438,7 @@ h5 {
     .title-header {
         line-height: 1em; 
         margin-top: 2em;
-        margin-bottom: -1em;
+        margin-bottom: 0; 
     }
 
     .search {

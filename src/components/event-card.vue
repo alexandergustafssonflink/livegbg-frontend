@@ -11,11 +11,12 @@
     <div class="image-wrapper" @click="() => console.log('hej')">
       <a :href="event.link">
         <img
-          :src="
-            event.place == 'Valand' ? '@/assets/valand.jpeg' : event.imageUrl
-          "
+          v-if="event.place == 'Valand'"
+          loading="lazy"
+          :src="`https://livegbg-test.herokuapp.com/api/proxy?url=${event.imageUrl}`"
           alt=""
         />
+        <img loading="lazy" v-else :src="event.imageUrl" alt="" />
       </a>
       <div class="info-wrapper">
         <q-btn

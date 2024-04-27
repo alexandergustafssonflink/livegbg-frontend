@@ -1,17 +1,17 @@
 <template>
   <div class="navbar">
     <div class="inner-navbar">
-      <div>
+      <div class="logo-wrapper q-mr-xl">
+        <img src="@/assets/live-gbg-logo.png" alt="" />
+      </div>
+      <div class="nav-links">
         <!-- <h3 class="logo q-mr-xl">LIVE GBG</h3> -->
-        <div class="logo-wrapper q-mr-xl">
-          <img src="@/assets/live-gbg-logo.png" alt="" />
-        </div>
         <router-link to="/">
           <q-btn
             class="q-ml-xl"
             size="36px"
             no-caps
-            color="primary"
+            color="secondary"
             flat
             outlined
             label="event"
@@ -19,10 +19,10 @@
         </router-link>
         <router-link to="/about">
           <q-btn
-            class="q-ml-lg"
+            class="q-ml-xl"
             size="36px"
             no-caps
-            color="primary"
+            color="secondary"
             flat
             outlined
             label="om oss"
@@ -83,14 +83,20 @@ export default {
   margin-bottom: 1em;
 }
 
+.nav-links {
+  margin-left: 25em;
+}
+
 .logo-wrapper {
-  height: 95%;
-  padding: 1em 0;
+  position: absolute;
+  height: 185px;
+  bottom: -5em;
 }
 
 .logo-wrapper img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .logo-small-wrapper {
@@ -121,7 +127,8 @@ h3 {
   background-color: #232323;
   width: 100vw;
   display: flex;
-  height: 200px;
+  position: relative;
+  height: 100px;
   justify-content: center;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -136,7 +143,6 @@ h3 {
   max-width: 1400px;
 }
 .navbar div {
-  height: 100%;
   display: flex;
   align-items: center;
 }

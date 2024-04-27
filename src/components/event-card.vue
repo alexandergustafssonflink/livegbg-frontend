@@ -12,10 +12,7 @@
       <a :href="event.link">
         <img
           :src="
-            event.place == 'Valand'
-              ? 'https://livegbg-test.herokuapp.com/api/proxy?url=' +
-                event.imageUrl
-              : event.imageUrl
+            event.place == 'Valand' ? '@/assets/valand.jpeg' : event.imageUrl
           "
           alt=""
         />

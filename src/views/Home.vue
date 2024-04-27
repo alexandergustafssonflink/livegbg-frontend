@@ -384,7 +384,7 @@ h1 {
 }
 h3 {
   font-weight: bold;
-  margin: 1em;
+  margin: 1em 1em 0em 1em;
   color: whitesmoke;
   text-align: center;
 }
@@ -527,6 +527,7 @@ h5 {
   justify-content: center;
   display: flex;
   align-items: center;
+  margin-top: 5em;
 }
 
 .filter h5 {
@@ -561,7 +562,7 @@ h5 {
     margin-bottom: 0;
   }
   .last-fetch {
-    margin-top: 5px;
+    display: none;
   }
   .mobile-filter-btn {
     display: none;
@@ -598,7 +599,7 @@ h5 {
     align-items: center;
     flex-direction: column;
     margin: 1em;
-    margin-top: 5em;
+    margin-top: 2em;
   }
 
   .no-events {

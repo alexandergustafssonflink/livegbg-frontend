@@ -151,6 +151,7 @@ img {
 .date-place {
   color: #ffc23c;
   width: 100%;
+  margin-top: -4px;
   margin-bottom: 2px;
   display: flex;
   justify-content: space-between;

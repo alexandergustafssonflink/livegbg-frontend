@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h1 class="title-header">Livemusik i Göteborg - samlat på ett ställe</h1>
-    <p class="last-fetch" v-if="!isLoading">
+    <div class="logo-wrapper q-mt-sm">
+      <img src="@/assets/live-gbg-logo.png" alt="" />
+    </div>
+
+    <p class="last-fetch q-mb-none" v-if="!isLoading">
       Senast uppdaterad: {{ lastFetch }}
     </p>
 
@@ -551,11 +554,14 @@ h5 {
   opacity: 0.4;
 }
 @media only screen and (min-width: 1100px) {
+  .logo-wrapper {
+    display: none;
+  }
   .title-header {
     margin-bottom: 0;
   }
   .last-fetch {
-    margin-top: 0;
+    margin-top: 5px;
   }
   .mobile-filter-btn {
     display: none;

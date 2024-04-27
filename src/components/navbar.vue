@@ -4,28 +4,28 @@
       <div>
         <!-- <h3 class="logo q-mr-xl">LIVE GBG</h3> -->
         <div class="logo-wrapper q-mr-xl">
-          <img src="@/assets/logo.png" alt="" />
+          <img src="@/assets/live-gbg-logo.png" alt="" />
         </div>
         <router-link to="/">
           <q-btn
             class="q-ml-xl"
-            size="24px"
+            size="36px"
             no-caps
             color="primary"
             flat
             outlined
-            label="Event"
+            label="event"
           ></q-btn>
         </router-link>
         <router-link to="/about">
           <q-btn
             class="q-ml-lg"
-            size="24px"
+            size="36px"
             no-caps
             color="primary"
             flat
             outlined
-            label="Om oss"
+            label="om oss"
           ></q-btn>
         </router-link>
       </div>
@@ -44,15 +44,15 @@
     <div class="navmenu" :class="navActive ? 'show' : 'hide'">
       <div class="links">
         <router-link @click="navActive = false" to="/"
-          ><h3>event</h3></router-link
+          ><h3>evenemang</h3></router-link
         >
         <router-link @click="navActive = false" to="/about"
           ><h3>om oss</h3></router-link
         >
       </div>
-      <div class="logo-small-wrapper">
-        <img src="@/assets/logo-small.png" alt="" />
-      </div>
+      <!-- <div class="logo-small-wrapper">
+        <img src="@/assets/live-gbg-logo.png" alt="" />
+      </div> -->
     </div>
   </div>
 </template>
@@ -85,7 +85,7 @@ export default {
 
 .logo-wrapper {
   height: 95%;
-  padding: 0.25em 0;
+  padding: 1em 0;
 }
 
 .logo-wrapper img {
@@ -118,10 +118,10 @@ h3 {
   font-weight: bold;
 }
 .navbar {
-  background-color: #31087b;
+  background-color: #232323;
   width: 100vw;
   display: flex;
-  height: 80px;
+  height: 200px;
   justify-content: center;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;

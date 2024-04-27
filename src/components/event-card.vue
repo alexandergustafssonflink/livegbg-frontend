@@ -10,7 +10,15 @@
     </a>
     <div class="image-wrapper" @click="() => console.log('hej')">
       <a :href="event.link">
-        <img :src="event.imageUrl" alt="" />
+        <img
+          :src="
+            event.place == 'Valand'
+              ? 'https://livegbg-test.herokuapp.com/api/proxy?url=' +
+                event.imageUrl
+              : event.imageUrl
+          "
+          alt=""
+        />
       </a>
       <div class="info-wrapper">
         <q-btn

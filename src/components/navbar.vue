@@ -89,7 +89,7 @@ export default {
 
 .logo-wrapper {
   position: absolute;
-  height: 185px;
+  height: 170px;
   bottom: -5em;
 }
 

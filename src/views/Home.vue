@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="logo-wrapper q-mt-sm">
+    <div class="logo-wrapper q-mt-sm" :class="isLoading ? 'pulsating' : ''">
       <img src="@/assets/live-gbg-logo.png" alt="" />
     </div>
 
@@ -377,6 +377,22 @@ export default {
 </script>
 
 <style scoped>
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1); /* Ursprunglig storlek */
+    opacity: 1; /* Full opacitet */
+  }
+  50% {
+    transform: scale(0.7); /* Större storlek */
+    opacity: 0.85; /* Lite genomskinlig */
+  }
+}
+
+.pulsating {
+  display: inline-block; /* Gör att div-taggen kan transformeras */
+  animation: pulse 2s infinite; /* Loopa animationen oändligt */
+}
 h1 {
   font-weight: bold;
   font-size: 36px;
@@ -435,7 +451,7 @@ h5 {
 }
 
 .spinner-wrapper {
-  height: 90vh;
+  margin-top: 2em;
   display: flex;
   justify-content: center;
   align-items: center;

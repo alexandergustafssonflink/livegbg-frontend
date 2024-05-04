@@ -1,14 +1,15 @@
 <template>
   <div class="navbar">
     <div class="inner-navbar">
-      <div class="logo-wrapper q-mr-xl">
-        <img src="@/assets/live-gbg-logo.png" alt="" />
-      </div>
+      <router-link to="/">
+        <div class="logo-wrapper">
+          <img src="@/assets/live-gbg-logo.png" alt="" />
+        </div>
+      </router-link>
       <div class="nav-links">
         <!-- <h3 class="logo q-mr-xl">LIVE GBG</h3> -->
         <router-link to="/">
           <q-btn
-            class="q-ml-xl"
             size="36px"
             no-caps
             color="secondary"
@@ -84,12 +85,12 @@ export default {
 }
 
 .nav-links {
-  margin-left: 25em;
 }
 
 .logo-wrapper {
   position: absolute;
   height: 170px;
+  width: 200px;
   bottom: -5em;
 }
 

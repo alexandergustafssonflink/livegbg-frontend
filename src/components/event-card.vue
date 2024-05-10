@@ -35,7 +35,11 @@
         >
           SÖK LÅTAR
         </q-btn>
-        <q-btn color="purple" class="event-btn" no-caps :href="event.link"
+        <q-btn
+          color="purple"
+          class="event-btn"
+          no-caps
+          @click="trackLink(event)"
           >MER INFO</q-btn
         >
       </div>
@@ -53,7 +57,16 @@ export default {
       required: true,
     },
   },
-  methods: {},
+  methods: {
+    trackLink(event) {
+      this.$gtag.event("click", {
+        event_category: event.place,
+        event_label: event.title,
+        value: event.link,
+      });
+      window.location = event.link;
+    },
+  },
   data() {
     return {
       // events: [],

@@ -112,9 +112,7 @@ h5 {
   text-align: left;
   margin: 0;
   max-width: 100%;
-  max-height: 1.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25em;
 }
 
 .image-wrapper {
@@ -172,7 +170,16 @@ img {
   font-weight: bold;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 500px) {
+  h5 {
+    color: whitesmoke;
+    text-align: left;
+    margin: 0;
+    max-width: 100%;
+    max-height: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 @media only screen and (max-width: 800px) {

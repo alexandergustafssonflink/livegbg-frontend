@@ -45,7 +45,7 @@
     <div class="navmenu" :class="navActive ? 'show' : 'hide'">
       <div class="links">
         <router-link @click="navActive = false" to="/"
-          ><h3>evenemang</h3></router-link
+          ><h3>event</h3></router-link
         >
         <router-link @click="navActive = false" to="/about"
           ><h3>om oss</h3></router-link
@@ -162,7 +162,7 @@ button.active {
   color: white !important;
 }
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1200px) {
   .navbar {
     display: none;
   }
@@ -222,7 +222,7 @@ button.active {
   }
 }
 
-@media only screen and (min-width: 1100px) {
+@media only screen and (min-width: 1200px) {
   .navbar-mobile {
     display: none;
   }

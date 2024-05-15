@@ -31,7 +31,7 @@
         </q-input>
         <q-btn
           no-caps
-          label="Sök"
+          label="SÖK"
           @click="searchWord = search"
           outline
           color="primary"
@@ -175,7 +175,8 @@
           <q-btn
             class="q-mt-md"
             no-caps
-            label="Sök"
+            icon="search"
+            label="SÖK"
             @click="searchWord = search"
             outline
             color="primary"
@@ -189,7 +190,7 @@
           @click="showFilter = true"
         ></q-btn>
         <div v-if="eventsToday.length || events.length">
-          <h3 v-if="eventsToday.length">Evenemang idag</h3>
+          <h3 v-if="eventsToday.length">Event idag</h3>
           <div class="events-today-wrapper">
             <div class="events-today">
               <EventCard
@@ -204,7 +205,7 @@
             v-if="events.length"
             :class="!eventsToday.length ? 'only-upcoming' : ''"
           >
-            Kommande evenemang
+            Kommande event
           </h3>
           <div class="event-wrapper">
             <EventCard
@@ -216,7 +217,7 @@
           </div>
         </div>
         <div v-else class="no-events">
-          <h3>Inga evenemang hittades</h3>
+          <h3>Inga event hittades</h3>
         </div>
       </div>
       <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
@@ -570,7 +571,7 @@ h5 {
 .last-fetch {
   opacity: 0.4;
 }
-@media only screen and (min-width: 1100px) {
+@media only screen and (min-width: 1200px) {
   .logo-wrapper {
     display: none;
   }
@@ -599,7 +600,7 @@ h5 {
   }
 }
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1200px) {
   .title-header {
     line-height: 1em;
     margin: 2em 0.25em 0 0.25em;
@@ -753,7 +754,7 @@ h5 {
   }
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1100px) {
+@media only screen and (min-width: 600px) and (max-width: 1200px) {
   .wrapper {
     padding: 0 2em;
   }

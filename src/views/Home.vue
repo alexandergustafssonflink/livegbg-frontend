@@ -246,7 +246,10 @@ export default {
   methods: {
     async getEvents() {
       this.isLoading = true;
-      const { data } = await axios.get(process.env.VUE_APP_API_URL + "events");
+      const { data } = await axios.get(
+        process.env.VUE_APP_API_URL + "events/gbg"
+      );
+      console.log(data);
       const today = new Date().toJSON().split("T")[0];
       this.allEvents = data[0].events
         .filter((event) => !event.title.toLowerCase().includes("inställt"))

@@ -37,6 +37,7 @@ import { ref } from "vue";
 import { useQuasar } from "quasar";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { checkLoginStatus } from "@/utils/auth";
 
 export default {
   name: "LoginPage",
@@ -59,6 +60,8 @@ export default {
         // Spara token om login lyckas
         const token = response.data.token;
         localStorage.setItem("token", token);
+        checkLoginStatus();
+
         router.push("/admin");
 
         $q.notify({ type: "positive", message: "Inloggning lyckades!" });

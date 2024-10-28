@@ -1,17 +1,26 @@
 import { jwtDecode } from "jwt-decode";
+import { ref } from "vue";
 
-export function isLoggedIn() {
+// Skapa en reaktiv variabel för inloggningsstatus
+const isLoggedIn = ref(!!localStorage.getItem("token"));
+
+export function checkLoginStatus() {
   const token = localStorage.getItem("token");
-  if (!token) return false;
+  if (!token) {
+    isLoggedIn.value = false;
+    return false;
+  }
 
   try {
-    const { exp } = jwtDecode(token); // Dekrypterar och extraherar `exp`
-    const currentTime = Date.now() / 1000; // Nuvarande tid i sekunder
-
-    // Kontrollera om tokenen fortfarande är giltig
-    return exp > currentTime;
+    const { exp } = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    isLoggedIn.value = exp > currentTime;
+    return isLoggedIn.value;
   } catch (error) {
     console.error("Ogiltig token", error);
+    isLoggedIn.value = false;
     return false;
   }
 }
+
+export { isLoggedIn };

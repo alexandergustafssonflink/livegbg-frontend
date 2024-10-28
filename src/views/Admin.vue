@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div class="text-h5 q-mb-md">Admin - Lägg till nytt event</div>
+    <div class="text-h5 q-mb-md">Lägg till nytt event</div>
 
     <q-form @submit="submitForm">
       <q-input
@@ -13,7 +13,6 @@
 
       <q-input
         v-model="date"
-        label="Datum"
         type="date"
         outlined
         class="q-mb-md input"

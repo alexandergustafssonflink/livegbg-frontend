@@ -19,7 +19,7 @@ const routes = [
     path: "/admin",
     component: Admin,
     beforeEnter: (to, from, next) => {
-      if (isLoggedIn()) {
+      if (isLoggedIn.value) {
         next();
       } else {
         next("/login");

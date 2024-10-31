@@ -1,6 +1,6 @@
 import "quasar/dist/quasar.css";
 import "@quasar/extras/material-icons/material-icons.css";
-import { Notify } from "quasar";
+import { Notify, Dialog } from "quasar";
 
 // To be used on app.use(Quasar, { ... })
 export default {
@@ -28,5 +28,6 @@ export default {
   },
   plugins: {
     Notify,
+    Dialog,
   },
 };

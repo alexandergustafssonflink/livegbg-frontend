@@ -49,15 +49,7 @@
         dark
         class="place-select q-mr-md"
         v-model="place"
-        :options="[
-          'Pustervik',
-          'Oceanen',
-          'Musikens hus',
-          'Nefertiti',
-          'Valand',
-          'Trägårn',
-          'Skeppet',
-        ]"
+        :options="placesOptions"
         label="Plats"
         color="primary"
       >
@@ -258,6 +250,15 @@ export default {
             new Date(event.date.split("T")[0]).getTime() >=
             new Date(today).getTime()
         );
+      this.placesOptions = Array.from(
+        new Set(
+          this.allEvents.reduce((acc, event) => {
+            acc.push(event.place);
+            return acc;
+          }, [])
+        )
+      );
+
       this.lastFetch =
         data[0].date.split("T")[0] +
         " " +
@@ -282,6 +283,7 @@ export default {
       search: "",
       searchWord: "",
       place: "",
+      placesOptions: [],
       dateFrom: "",
       dateTo: "",
       showFilter: false,

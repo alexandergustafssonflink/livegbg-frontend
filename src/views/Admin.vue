@@ -111,6 +111,7 @@
                 v-model="eventInfo"
                 label="Eventinformation"
                 outlined
+                type="textarea"
                 class="q-mb-md"
                 :rules="[(val) => !!val || 'Eventinformation är obligatoriskt']"
               />

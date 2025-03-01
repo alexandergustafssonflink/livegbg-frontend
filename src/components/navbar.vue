@@ -7,7 +7,6 @@
         </div>
       </router-link>
       <div class="nav-links">
-        <!-- <h3 class="logo q-mr-xl">LIVE GBG</h3> -->
         <div>
           <router-link to="/">
             <q-btn

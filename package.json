@@ -11,6 +11,7 @@
     "@quasar/extras": "^1.15.1",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
+    "jwt-decode": "^4.0.0",
     "quasar": "^2.7.7",
     "vue": "^3.0.0",
     "vue-gtag": "^2.0.1",

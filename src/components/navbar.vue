@@ -8,28 +8,53 @@
       </router-link>
       <div class="nav-links">
         <!-- <h3 class="logo q-mr-xl">LIVE GBG</h3> -->
-        <router-link to="/">
-          <q-btn
-            size="36px"
-            no-caps
-            color="secondary"
-            flat
-            outlined
-            label="event"
-          ></q-btn>
-        </router-link>
-        <router-link to="/about">
-          <q-btn
-            class="q-ml-xl"
-            size="36px"
-            no-caps
-            color="secondary"
-            flat
-            outlined
-            label="om oss"
-          ></q-btn>
-        </router-link>
+        <div>
+          <router-link to="/">
+            <q-btn
+              size="36px"
+              no-caps
+              color="secondary"
+              flat
+              outlined
+              label="event"
+            ></q-btn>
+          </router-link>
+          <router-link to="/about">
+            <q-btn
+              class="q-ml-xl"
+              size="36px"
+              no-caps
+              color="secondary"
+              flat
+              outlined
+              label="om oss"
+            ></q-btn>
+          </router-link>
+          <router-link v-if="isLoggedIn" to="/admin">
+            <q-btn
+              class="q-ml-xl"
+              size="36px"
+              no-caps
+              color="secondary"
+              flat
+              outlined
+              label="admin"
+            ></q-btn>
+          </router-link>
+        </div>
       </div>
+
+      <q-btn
+        v-if="isLoggedIn"
+        class="q-ml-xl logout-btn"
+        @click="logout"
+        size="36px"
+        no-caps
+        color="secondary"
+        flat
+        outlined
+        label="Logga ut"
+      ></q-btn>
     </div>
   </div>
   <div class="navbar-mobile">
@@ -59,14 +84,26 @@
 </template>
 
 <script>
+import { isLoggedIn, checkLoginStatus } from "@/utils/auth";
 export default {
   name: "NavBar",
   components: {},
-  methods: {},
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      checkLoginStatus(); // Uppdatera login-status omedelbart efter utloggning
+      this.$router.push("/login"); // Omdirigera till login-sidan
+    },
+  },
   data() {
     return {
       navActive: false,
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return isLoggedIn.value;
+    },
   },
   created() {},
 };
@@ -85,6 +122,8 @@ export default {
 }
 
 .nav-links {
+  display: flex;
+  justify-content: space-between;
 }
 
 .logo-wrapper {
@@ -220,6 +259,10 @@ button.active {
     /* top: 0px;
         left: 0px; */
   }
+}
+
+.logout-btn {
+  font-size: 20px !important;
 }
 
 @media only screen and (min-width: 1200px) {

@@ -1,6 +1,6 @@
-import Home from "@/views/Home.vue";
-import About from "@/views/About.vue";
-import Admin from "@/views/Admin.vue";
+import Home from "@/views/HomePage.vue";
+import About from "@/views/AboutPage.vue";
+import Admin from "@/views/AdminPage.vue";
 import Login from "@/views/Login.vue";
 import { isLoggedIn } from "@/utils/auth.js";
 

@@ -241,7 +241,7 @@ import EventInfo from "@/components/event-info.vue";
 import EventCard from "@/components/event-card.vue";
 
 export default {
-  name: "Home",
+  name: "HomePage",
   components: {
     ArtistInfo,
     EventCard,

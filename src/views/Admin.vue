@@ -48,7 +48,7 @@
       </template>
     </q-table>
 
-    <!-- Dialog/modal för formuläret -->
+    <!-- Dialog för formuläret -->
     <q-dialog v-model="isDialogOpen" persistent>
       <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
@@ -89,13 +89,46 @@
               class="q-mb-md"
             />
 
-            <q-input
-              v-model="link"
-              label="Länk till eventet"
-              outlined
+            <!-- Checkbox: Finns länk till information om event? -->
+            <q-checkbox
+              v-model="hasEventLink"
+              label="Finns länk till information om event?"
               class="q-mb-md"
-              :rules="[(val) => !!val || 'Länk till event är obligatoriskt']"
             />
+
+            <!-- Visa input beroende på checkbox -->
+            <template v-if="hasEventLink">
+              <q-input
+                v-model="link"
+                label="Länk till eventet"
+                outlined
+                class="q-mb-md"
+                :rules="[(val) => !!val || 'Länk till event är obligatoriskt']"
+              />
+            </template>
+            <template v-else>
+              <q-input
+                v-model="eventInfo"
+                label="Eventinformation"
+                outlined
+                class="q-mb-md"
+                :rules="[(val) => !!val || 'Eventinformation är obligatoriskt']"
+              />
+              <q-input
+                v-model="eventPrice"
+                label="Pris"
+                outlined
+                class="q-mb-md"
+                :rules="[(val) => !!val || 'Pris är obligatoriskt']"
+              />
+              <q-input
+                v-model="ticketLink"
+                label="Biljettlänk"
+                outlined
+                class="q-mb-md"
+                :rules="[(val) => !!val || 'Biljettlänk är obligatoriskt']"
+              />
+            </template>
 
             <q-btn
               label="Skicka"
@@ -127,9 +160,12 @@ export default {
     const date = ref("");
     const imageFile = ref(null);
     const imagePreview = ref("");
+    const hasEventLink = ref(true);
     const link = ref("");
+    const eventInfo = ref("");
+    const eventPrice = ref("");
+    const ticketLink = ref("");
     const isDialogOpen = ref(false);
-    // V-model för Q‑File: kan vara en array eller ett enskilt File‑objekt
     const selectedFiles = ref(null);
     const $q = useQuasar();
     const events = ref([]);
@@ -153,10 +189,7 @@ export default {
         events.value = response.data;
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          $q.notify({
-            type: "negative",
-            message: "Du är inte inloggad",
-          });
+          $q.notify({ type: "negative", message: "Du är inte inloggad" });
           router.push("/login");
           localStorage.removeItem("token");
         }
@@ -167,7 +200,6 @@ export default {
       }
     };
 
-    // Watch för att hantera filvalet
     watch(selectedFiles, (newVal) => {
       let file = null;
       if (!newVal) {
@@ -177,7 +209,6 @@ export default {
       } else {
         file = newVal;
       }
-
       if (file && file instanceof Blob) {
         imageFile.value = file;
         imagePreview.value = URL.createObjectURL(file);
@@ -202,7 +233,13 @@ export default {
         const formData = new FormData();
         formData.append("title", title.value);
         formData.append("date", date.value);
-        formData.append("link", link.value);
+        if (hasEventLink.value) {
+          formData.append("link", link.value);
+        } else {
+          formData.append("eventInfo", eventInfo.value);
+          formData.append("eventPrice", eventPrice.value);
+          formData.append("ticketLink", ticketLink.value);
+        }
         if (imageFile.value) {
           formData.append("image", imageFile.value);
         }
@@ -219,6 +256,9 @@ export default {
         imageFile.value = null;
         imagePreview.value = "";
         link.value = "";
+        eventInfo.value = "";
+        eventPrice.value = "";
+        ticketLink.value = "";
         closeDialog();
       } catch (error) {
         $q.notify({
@@ -242,7 +282,11 @@ export default {
       imageFile.value = null;
       imagePreview.value = "";
       link.value = "";
+      eventInfo.value = "";
+      eventPrice.value = "";
+      ticketLink.value = "";
       selectedFiles.value = null;
+      hasEventLink.value = true;
     };
 
     const deleteEvent = async (id) => {
@@ -273,6 +317,10 @@ export default {
       date,
       imagePreview,
       link,
+      hasEventLink,
+      eventInfo,
+      eventPrice,
+      ticketLink,
       isDialogOpen,
       events,
       columns,

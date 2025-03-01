@@ -1,15 +1,37 @@
 <template>
   <div class="event-container">
-    <a :href="event.link">
+    <!-- Om det finns en länk, gör event-info klickbar -->
+    <template v-if="event.link">
+      <a :href="event.link">
+        <div class="event-info">
+          <h5>{{ event.title }}</h5>
+          <p class="date-place">
+            {{ event.date.split("T")[0] }} - {{ event.place }}
+          </p>
+        </div>
+      </a>
+    </template>
+    <template v-else>
       <div class="event-info">
         <h5>{{ event.title }}</h5>
         <p class="date-place">
           {{ event.date.split("T")[0] }} - {{ event.place }}
         </p>
       </div>
-    </a>
-    <div class="image-wrapper" @click="() => console.log('hej')">
-      <a :href="event.link">
+    </template>
+    <div class="image-wrapper">
+      <template v-if="event.link">
+        <a :href="event.link">
+          <img
+            v-if="event.place == 'Valand'"
+            loading="lazy"
+            :src="`https://livegbg-test.herokuapp.com/api/proxy?url=${event.imageUrl}`"
+            alt=""
+          />
+          <img loading="lazy" v-else :src="event.imageUrl" alt="" />
+        </a>
+      </template>
+      <template v-else>
         <img
           v-if="event.place == 'Valand'"
           loading="lazy"
@@ -17,7 +39,7 @@
           alt=""
         />
         <img loading="lazy" v-else :src="event.imageUrl" alt="" />
-      </a>
+      </template>
       <div class="info-wrapper">
         <q-btn
           v-if="
@@ -26,8 +48,8 @@
             !event.title.toLowerCase().includes('barnens ocean') &&
             !event.title.toLowerCase().includes('barnmattan') &&
             !event.title.toLowerCase().includes('poesi och prosa') &&
-            !event.title.toLowerCase().includes('barnmattan') &&
-            !event.title.toLowerCase().includes('konsert')
+            !event.title.toLowerCase().includes('konsert') &&
+            !event.imageUrl.toLowerCase().includes('cloudinary.com/dvyl105jb')
           "
           class="info-btn"
           no-caps
@@ -35,13 +57,9 @@
         >
           SÖK LÅTAR
         </q-btn>
-        <q-btn
-          color="purple"
-          class="event-btn"
-          no-caps
-          @click="trackLink(event)"
-          >MER INFO</q-btn
-        >
+        <q-btn color="purple" class="event-btn" no-caps @click="handleMoreInfo">
+          MER INFO
+        </q-btn>
       </div>
     </div>
   </div>
@@ -50,6 +68,7 @@
 <script>
 export default {
   name: "EventCard",
+  emits: ["showEventInfo", "showArtistInfo"],
   components: {},
   props: {
     event: {
@@ -58,12 +77,21 @@ export default {
     },
   },
   methods: {
+    handleMoreInfo() {
+      // "this.event" refererar nu till din prop
+      if (this.event.link && this.event.link.trim() !== "") {
+        this.trackLink(this.event);
+      } else {
+        this.$emit("showEventInfo", this.event);
+      }
+    },
     trackLink(event) {
       this.$gtag.event("click", {
         event_category: event.place,
         event_label: event.title,
         value: event.link,
       });
+
       window.location = event.link;
     },
   },
@@ -72,6 +100,7 @@ export default {
       // events: [],
       isLoading: Boolean,
       showArtistInfo: false,
+      showEventInfo: false,
       chosenArtist: "",
       search: "",
     };

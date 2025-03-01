@@ -6,7 +6,7 @@
         label="Skapa event"
         color="purple"
         @click="openDialog"
-        class="q-mb-md"
+        class="q-mb-md q-ml-md"
       />
     </div>
     <q-table :rows="events" :columns="columns" row-key="_id" class="q-mb-md">

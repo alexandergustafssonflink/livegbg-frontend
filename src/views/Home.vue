@@ -187,6 +187,7 @@
             <div class="events-today">
               <EventCard
                 @show-artist-info="(artist) => showArtistBar(artist)"
+                @show-event-info="(e) => showEventBar(e)"
                 :event="event"
                 v-for="(event, i) in eventsToday"
                 :key="i"
@@ -202,6 +203,7 @@
           <div class="event-wrapper">
             <EventCard
               @show-artist-info="(artist) => showArtistBar(artist)"
+              @show-event-info="(e) => showEventBar(e)"
               :event="event"
               v-for="(event, i) in events"
               :key="i"
@@ -220,6 +222,14 @@
           @close="showArtistInfo = false"
         />
       </div>
+      <div class="artist-menu" :class="showEventInfo ? 'show' : 'hide'">
+        <event-info
+          v-if="showEventInfo"
+          :chosen-event="chosenEvent"
+          :show-event-info="showEventInfo"
+          @close="showEventInfo = false"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -227,6 +237,7 @@
 <script>
 import axios from "axios";
 import ArtistInfo from "@/components/artist-info.vue";
+import EventInfo from "@/components/event-info.vue";
 import EventCard from "@/components/event-card.vue";
 
 export default {
@@ -234,6 +245,7 @@ export default {
   components: {
     ArtistInfo,
     EventCard,
+    EventInfo,
   },
   methods: {
     async getEvents() {
@@ -241,7 +253,6 @@ export default {
       const { data } = await axios.get(
         process.env.VUE_APP_API_URL + "events/gbg"
       );
-      console.log(data);
       const today = new Date().toJSON().split("T")[0];
       this.allEvents = data[0].events
         .filter((event) => !event.title.toLowerCase().includes("inställt"))
@@ -273,13 +284,19 @@ export default {
       this.showArtistInfo = true;
       this.chosenArtist = artist;
     },
+    showEventBar(event) {
+      this.showEventInfo = true;
+      this.chosenEvent = event;
+    },
   },
   data() {
     return {
       // events: [],
       isLoading: Boolean,
       showArtistInfo: false,
+      showEventInfo: false,
       chosenArtist: "",
+      chosenEvent: "",
       search: "",
       searchWord: "",
       place: "",

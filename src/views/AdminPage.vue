@@ -127,7 +127,6 @@
                 label="Biljettlänk"
                 outlined
                 class="q-mb-md"
-                :rules="[(val) => !!val || 'Biljettlänk är obligatoriskt']"
               />
             </template>
 

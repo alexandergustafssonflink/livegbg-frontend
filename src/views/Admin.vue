@@ -19,17 +19,14 @@
             alt="Event image"
             style="max-width: 100px; height: auto"
           />
-
           <!-- Titelkolumn -->
           <div v-else-if="props.col.name === 'title'" class="text-h5 text-left">
             {{ props.row.title }}
           </div>
-
           <!-- Datumkolumn -->
           <div v-else-if="props.col.name === 'date'" class="text-subtitle1">
             {{ props.row.date.split("T")[0] }}
           </div>
-
           <!-- Länkkolumn -->
           <q-btn
             v-else-if="props.col.name === 'link'"
@@ -39,7 +36,6 @@
             color="purple"
             flat
           />
-
           <!-- Radera-knapp -->
           <q-btn
             v-else-if="props.col.name === 'delete'"
@@ -60,33 +56,44 @@
         </q-card-section>
 
         <q-card-section>
-          <q-form @submit="submitForm">
+          <q-form @submit.prevent="submitForm">
             <q-input
               v-model="title"
               label="Namn"
               outlined
-              class="q-mb-md input"
+              class="q-mb-md"
               :rules="[(val) => !!val || 'Namn är obligatoriskt']"
             />
             <q-input
               v-model="date"
               type="date"
               outlined
-              class="q-mb-md input"
+              class="q-mb-md"
               :rules="[(val) => !!val || 'Datum är obligatoriskt']"
             />
-            <q-input
-              v-model="imageUrl"
-              label="Bild URL"
-              outlined
-              class="q-mb-md input"
-              :rules="[(val) => !!val || 'Bild URL är obligatoriskt']"
+
+            <!-- Filuppladdning med Q‑File -->
+            <q-file
+              filled
+              label="Välj bild"
+              accept="image/*"
+              v-model="selectedFiles"
+              class="q-mb-md"
             />
+            <!-- Förhandsvisning av vald bild -->
+            <q-img
+              v-if="imagePreview"
+              :src="imagePreview"
+              alt="Bild förhandsvisning"
+              style="max-width: 100px; height: auto"
+              class="q-mb-md"
+            />
+
             <q-input
               v-model="link"
               label="Länk till eventet"
               outlined
-              class="q-mb-md input"
+              class="q-mb-md"
               :rules="[(val) => !!val || 'Länk till event är obligatoriskt']"
             />
 
@@ -108,7 +115,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useQuasar } from "quasar";
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -118,52 +125,34 @@ export default {
   setup() {
     const title = ref("");
     const date = ref("");
-    const imageUrl = ref("");
+    const imageFile = ref(null);
+    const imagePreview = ref("");
     const link = ref("");
-    const isDialogOpen = ref(false); // Endast i setup
+    const isDialogOpen = ref(false);
+    // V-model för Q‑File: kan vara en array eller ett enskilt File‑objekt
+    const selectedFiles = ref(null);
     const $q = useQuasar();
     const events = ref([]);
     const router = useRouter();
 
     const columns = [
-      {
-        name: "title",
-        label: "Namn",
-        align: "center",
-      },
-      {
-        name: "date",
-        label: "Datum",
-        align: "center",
-      },
-      {
-        name: "link",
-        label: "Länk",
-        align: "center",
-      },
-      {
-        name: "delete",
-        label: "Radera",
-        align: "center",
-      },
+      { name: "title", label: "Namn", align: "center" },
+      { name: "date", label: "Datum", align: "center" },
+      { name: "link", label: "Länk", align: "center" },
+      { name: "delete", label: "Radera", align: "center" },
     ];
 
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
+        const config = { headers: { Authorization: `Bearer ${token}` } };
         const response = await axios.get(
           process.env.VUE_APP_API_URL + "events/external/my-events",
           config
         );
         events.value = response.data;
       } catch (error) {
-        if (error.response.status === 403) {
+        if (error.response && error.response.status === 403) {
           $q.notify({
             type: "negative",
             message: "Du är inte inloggad",
@@ -178,34 +167,57 @@ export default {
       }
     };
 
+    // Watch för att hantera filvalet
+    watch(selectedFiles, (newVal) => {
+      let file = null;
+      if (!newVal) {
+        file = null;
+      } else if (Array.isArray(newVal)) {
+        file = newVal[0];
+      } else {
+        file = newVal;
+      }
+
+      if (file && file instanceof Blob) {
+        imageFile.value = file;
+        imagePreview.value = URL.createObjectURL(file);
+        console.log("Vald fil:", file);
+      } else {
+        imageFile.value = null;
+        imagePreview.value = "";
+        console.warn("Ingen giltig fil vald.");
+      }
+    });
+
     const submitForm = async () => {
       try {
         const token = localStorage.getItem("token");
-
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         };
 
-        const data = {
-          title: title.value,
-          date: date.value,
-          imageUrl: imageUrl.value,
-          link: link.value,
-        };
+        const formData = new FormData();
+        formData.append("title", title.value);
+        formData.append("date", date.value);
+        formData.append("link", link.value);
+        if (imageFile.value) {
+          formData.append("image", imageFile.value);
+        }
 
         await axios.post(
           process.env.VUE_APP_API_URL + "events/external",
-          data,
+          formData,
           config
         );
 
         $q.notify({ type: "positive", message: "Eventet har skapats!" });
-        // Rensa formuläret
         title.value = "";
         date.value = "";
-        imageUrl.value = "";
+        imageFile.value = null;
+        imagePreview.value = "";
         link.value = "";
         closeDialog();
       } catch (error) {
@@ -227,8 +239,10 @@ export default {
       isDialogOpen.value = false;
       title.value = "";
       date.value = "";
-      imageUrl.value = "";
+      imageFile.value = null;
+      imagePreview.value = "";
       link.value = "";
+      selectedFiles.value = null;
     };
 
     const deleteEvent = async (id) => {
@@ -240,30 +254,24 @@ export default {
         color: "green",
       }).onOk(async () => {
         const token = localStorage.getItem("token");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
+        const config = { headers: { Authorization: `Bearer ${token}` } };
         await axios.delete(
           process.env.VUE_APP_API_URL + "events/external/" + id,
           config
         );
-
         events.value = events.value.filter((event) => event._id !== id);
         $q.notify({ type: "positive", message: "Eventet har raderats!" });
       });
     };
 
-    onMounted(async () => {
+    onMounted(() => {
       fetchData();
     });
 
     return {
       title,
       date,
-      imageUrl,
+      imagePreview,
       link,
       isDialogOpen,
       events,
@@ -272,12 +280,8 @@ export default {
       closeDialog,
       submitForm,
       deleteEvent,
+      selectedFiles,
     };
   },
 };
 </script>
-
-<style>
-.input * {
-}
-</style>

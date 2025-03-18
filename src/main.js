@@ -26,15 +26,19 @@ import {
 import router from "./router/index.js";
 import VueGtag from "vue-gtag";
 
+console.log("VueGtag", VueGtag);
+
 createApp(App)
   .use(router)
   .use(VueGtag, {
     config: { id: "G-W4SH1ZH8QD" },
+    pageTrackerScreenviewEnabled: true,
+    appName: "LiveGBG",
   })
   .use(Quasar, {
     ...quasarUserOptions,
     directives: {
-      ClosePopup, // Lägg till ClosePopup direktivet
+      ClosePopup,
     },
     components: {
       QBtn,

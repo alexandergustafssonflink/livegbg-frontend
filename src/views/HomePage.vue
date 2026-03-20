@@ -11,15 +11,15 @@
     <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
       <div class="search">
         <q-input
-          dark
           v-model="search"
-          label-color="primary"
+          label-color="secondary"
           label="Sök event"
+          color="secondary"
           @blur="search == '' ? (searchWord = '') : ''"
         >
           <template v-slot:append>
             <q-icon
-              color="primary"
+              color="secondary"
               name="close"
               @click="
                 search = '';
@@ -34,7 +34,7 @@
           label="SÖK"
           @click="searchWord = search"
           outline
-          color="primary"
+          color="secondary"
         ></q-btn>
       </div>
       <q-btn
@@ -46,15 +46,15 @@
       ></q-btn>
       <h5>Filter</h5>
       <q-select
-        dark
         class="place-select q-mr-md"
         v-model="place"
         :options="placesOptions"
         label="Plats"
-        color="primary"
+        color="secondary"
+        label-color="secondary"
       >
         <template v-slot:prepend>
-          <q-icon color="primary" name="place" @click.stop.prevent />
+          <q-icon color="secondary" name="place" @click.stop.prevent />
         </template>
         <template v-slot:append>
           <q-icon
@@ -68,8 +68,8 @@
       <q-input
         v-model="dateFrom"
         class="q-mr-md search-date"
-        color="primary"
-        label-color="primary"
+        color="secondary"
+        label-color="secondary"
         label="Datum från"
         placeholder="Anytime (XXXX-XX-XX)"
       >
@@ -80,9 +80,9 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date dark v-model="dateFrom" mask="YYYY-MM-DD">
+              <q-date v-model="dateFrom" mask="YYYY-MM-DD">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup label="Close" color="secondary" flat />
                 </div>
               </q-date>
             </q-popup-proxy>
@@ -92,7 +92,8 @@
       <q-input
         v-model="dateTo"
         class="search-date"
-        label-color="primary"
+        color="secondary"
+        label-color="secondary"
         label="Datum till"
         placeholder="Anytime (XXXX-XX-XX)"
       >
@@ -103,9 +104,9 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date dark v-model="dateTo" mask="YYYY-MM-DD">
+              <q-date v-model="dateTo" mask="YYYY-MM-DD">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup label="Close" color="secondary" flat />
                 </div>
               </q-date>
             </q-popup-proxy>
@@ -124,7 +125,7 @@
             place = '';
           "
           outline
-          color="primary"
+          color="secondary"
         ></q-btn>
         <q-btn
           class="results-btn"
@@ -132,28 +133,27 @@
           label="Visa resultat"
           :disable="!dateFrom && !dateTo && !place"
           @click="closeFilterMenu"
-          color="primary"
+          color="secondary"
         ></q-btn>
       </div>
     </div>
     <div>
       <div v-if="isLoading" class="spinner-wrapper">
-        <q-spinner-audio color="primary" size="8em" />
+        <q-spinner-audio color="secondary" size="8em" />
       </div>
       <div v-else class="wrapper">
         <div class="search-mobile">
           <q-input
             v-model="search"
-            dark
-            color="primary"
-            label-color="primary"
+            color="secondary"
+            label-color="secondary"
             label="Sök event"
             @blur="search == '' ? (searchWord = '') : ''"
           >
             <template v-slot:append>
               <q-icon
                 v-if="search || searchWord"
-                color="primary"
+                color="secondary"
                 size="lg"
                 name="close"
                 @click="
@@ -171,14 +171,14 @@
             label="SÖK"
             @click="searchWord = search"
             outline
-            color="primary"
+            color="secondary"
           ></q-btn>
         </div>
         <q-btn
           class="mobile-filter-btn"
           no-caps
           icon="filter_alt"
-          color="primary"
+          color="secondary"
           @click="showFilter = true"
         ></q-btn>
         <div v-if="eventsToday.length || events.length">
@@ -403,29 +403,42 @@ export default {
 @keyframes pulse {
   0%,
   100% {
-    transform: scale(1); /* Ursprunglig storlek */
-    opacity: 1; /* Full opacitet */
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    transform: scale(0.7); /* Större storlek */
-    opacity: 0.85; /* Lite genomskinlig */
+    transform: scale(0.7);
+    opacity: 0.85;
   }
 }
 
 .pulsating {
-  display: inline-block; /* Gör att div-taggen kan transformeras */
-  animation: pulse 2s infinite; /* Loopa animationen oändligt */
+  display: inline-block;
+  animation: pulse 2s infinite;
 }
 h1 {
   font-weight: bold;
   font-size: 36px;
-  color: whitesmoke;
+  color: #1a1208;
+  font-family: "Playfair Display", Georgia, serif;
 }
 h3 {
-  font-weight: bold;
+  font-weight: 900;
   margin: 1em 1em 0em 1em;
-  color: whitesmoke;
+  color: #1a1208;
   text-align: center;
+  font-family: "Playfair Display", Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h3::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #8b0000;
+  margin: 0.3em auto 0;
 }
 
 .event-wrapper {
@@ -445,13 +458,13 @@ h3 {
 }
 
 .event-card {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: 4px 4px 0 #1a1208;
+  border: 2px solid #1a1208;
   width: 400px;
   height: 340px;
-  border-radius: 0.25em;
   margin: 2em;
   position: relative;
-  background-color: whitesmoke;
+  background-color: #f4f0e8;
 }
 
 .image-wrapper {
@@ -464,6 +477,7 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: grayscale(100%) sepia(20%);
 }
 h5 {
   text-align: left;
@@ -471,6 +485,8 @@ h5 {
   max-height: 2.8em;
   max-width: 280px;
   overflow: hidden;
+  font-family: "Playfair Display", Georgia, serif;
+  color: #1a1208;
 }
 
 .spinner-wrapper {
@@ -496,22 +512,20 @@ h5 {
   bottom: 1em;
   right: 2em;
 }
-/* 
-#100720
-#31087B
-#FA2FB5
-#FFC23C */
+
 .date {
   position: absolute;
   top: 0;
-  background: rgba(0, 0, 0, 0.6);
-  color: #ffc23c;
+  background: rgba(244, 240, 232, 0.88);
+  color: #8b0000;
   width: 100%;
   padding: 0.5em;
   display: flex;
   justify-content: space-between;
   font-size: 16px;
   font-weight: bold;
+  border-bottom: 1px solid #1a1208;
+  font-family: "EB Garamond", Georgia, serif;
 }
 
 .place {
@@ -526,6 +540,8 @@ h5 {
   font-size: 16px;
   font-weight: bold;
   text-align: left;
+  color: #1a1208;
+  font-family: "EB Garamond", Georgia, serif;
 }
 
 .artist-menu {
@@ -533,7 +549,8 @@ h5 {
   width: 400px;
   position: fixed;
   transition: 0.3s ease;
-  background: #31087b;
+  background: #f4f0e8;
+  border-right: 4px double #1a1208;
 }
 
 .artist-menu.show {
@@ -553,7 +570,7 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: solid 3px whitesmoke;
+  border-right: solid 2px #1a1208;
   padding-right: 3em;
   margin-right: 3em;
 }
@@ -567,23 +584,27 @@ h5 {
   display: flex;
   align-items: center;
   margin-top: 5em;
+  background: #f4f0e8;
+  border-bottom: 2px solid #1a1208;
+  border-top: 2px solid #1a1208;
+  padding: 1em 0;
 }
 
 .filter h5 {
-  color: whitesmoke;
+  color: #1a1208;
   margin-right: 1em;
 }
 
 .filter :deep(input) {
-  color: whitesmoke;
+  color: #1a1208;
 }
 
 .filter :deep(select span) {
-  color: whitesmoke;
+  color: #1a1208;
 }
 
 .search-date i {
-  color: #ffc23c;
+  color: #8b0000;
 }
 
 .place-select {
@@ -591,8 +612,17 @@ h5 {
 }
 
 .last-fetch {
-  opacity: 0.4;
+  opacity: 0.5;
+  font-family: "EB Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  color: #1a1208;
 }
+
+.logo-wrapper img {
+  filter: grayscale(100%) sepia(30%);
+}
+
 @media only screen and (min-width: 1200px) {
   .logo-wrapper {
     display: none;
@@ -650,11 +680,11 @@ h5 {
   }
 
   .search-mobile :deep(input) {
-    color: whitesmoke;
+    color: #1a1208;
   }
 
   .search-mobile :deep(select span) {
-    color: whitesmoke;
+    color: #1a1208;
   }
 
   .search-mobile label {
@@ -681,10 +711,6 @@ h5 {
     margin: 1em;
   }
 
-  /* .events-today-wrapper h3 {
-        margin-top: 2em;
-    } */
-
   h3 {
     margin: 0.5em;
   }
@@ -692,7 +718,7 @@ h5 {
   .filter {
     height: 100%;
     width: 100vw;
-    background-color: #100720;
+    background-color: #f4f0e8;
     justify-content: inherit;
     padding-top: 5em;
     position: fixed;
@@ -702,6 +728,8 @@ h5 {
     flex-direction: column;
     transition: 0.3s ease;
     padding: 5em 2em 2em 2em;
+    border: none;
+    border-bottom: 4px double #1a1208;
   }
 
   .filter .q-mr-md {
@@ -753,16 +781,13 @@ h5 {
     margin-right: 0;
     font-size: 36px;
     margin-bottom: 1em;
+    color: #1a1208;
   }
 
   .filter label {
     width: 100%;
     margin-top: 1em;
   }
-  /* 
-    .only-upcoming  {
-        margin-top: 70px;
-    } */
 
   .q-date {
     width: 90vw;

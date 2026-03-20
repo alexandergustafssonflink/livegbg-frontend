@@ -57,7 +57,7 @@
         >
           SÖK LÅTAR
         </q-btn>
-        <q-btn color="purple" class="event-btn" no-caps @click="handleMoreInfo">
+        <q-btn class="event-btn" no-caps @click="handleMoreInfo">
           MER INFO
         </q-btn>
       </div>
@@ -112,11 +112,12 @@ export default {
 
 <style scoped>
 .event-container {
-  margin: 3em 2em;
+  margin: 2em 1.5em;
   width: 400px;
-  /* border: 3px solid transparent; */
   box-sizing: border-box;
   overflow: hidden;
+  border: 2px solid #1a1208;
+  background-color: #f4f0e8;
 }
 
 .event-container .info-wrapper {
@@ -133,27 +134,31 @@ export default {
 }
 
 .event-container:hover {
-  /* border: 3px solid white; */
   cursor: pointer;
+  box-shadow: 4px 4px 0 #1a1208;
 }
 h5 {
-  color: whitesmoke;
+  color: #1a1208;
   text-align: left;
   margin: 0;
   max-width: 100%;
   line-height: 1.25em;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
 }
 
 .image-wrapper {
   width: 100%;
   height: 500px;
   position: relative;
+  border-top: 2px solid #1a1208;
 }
 
 img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: grayscale(100%) sepia(20%);
 }
 
 .info-wrapper {
@@ -165,7 +170,8 @@ img {
   opacity: 0;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(16, 7, 32, 0.5);
+  background-color: rgba(244, 240, 232, 0.88);
+  border-top: 2px solid #1a1208;
 }
 
 .info-wrapper button {
@@ -174,8 +180,11 @@ img {
 
 .info-btn {
   width: 40%;
-  background: #ffc23c;
-  color: black;
+  background: #1a1208;
+  color: #f4f0e8;
+  border: 1px solid #1a1208;
+  font-family: "EB Garamond", Georgia, serif;
+  letter-spacing: 0.05em;
 }
 
 .q-btn {
@@ -183,25 +192,38 @@ img {
   font-weight: bold;
   display: flex;
   align-items: center;
+  font-family: "EB Garamond", Georgia, serif;
+  letter-spacing: 0.05em;
 }
 
 .event-btn {
   width: 40%;
+  background: #8b0000;
+  color: #f4f0e8;
+  border: 1px solid #8b0000;
+  font-family: "EB Garamond", Georgia, serif;
 }
+
 .date-place {
-  color: #ffc23c;
+  color: #8b0000;
   width: 100%;
   margin-top: -4px;
   margin-bottom: 2px;
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
+  font-family: "EB Garamond", Georgia, serif;
+  letter-spacing: 0.03em;
+}
+
+.event-info {
+  padding: 0.5em 0.75em;
 }
 
 @media only screen and (min-width: 500px) {
   h5 {
-    color: whitesmoke;
+    color: #1a1208;
     text-align: left;
     margin: 0;
     max-width: 100%;

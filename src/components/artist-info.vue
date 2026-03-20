@@ -109,12 +109,13 @@ export default {
 
 <style scoped>
 .menu {
-  background: #100720;
-  color: #ffc23c;
+  background: #f4f0e8;
+  color: #1a1208;
   height: 100%;
   width: 100%;
   padding: 2em;
-  box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+  box-shadow: 4px 4px 0 #1a1208;
+  border-right: 4px double #1a1208;
 }
 
 .loading {
@@ -125,20 +126,25 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+  color: #1a1208;
 }
 
 h3 {
   font-weight: 700;
-  color: #ffc23c;
+  color: #1a1208;
+  font-family: "Playfair Display", Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 h5 {
-  color: #ffc23c;
+  color: #1a1208;
   margin: 0.25em;
+  font-family: "EB Garamond", Georgia, serif;
 }
 
 .artist-name {
-  color: #ffc23c;
+  color: #1a1208;
 }
 
 .song h5 {
@@ -150,7 +156,7 @@ h5 {
 }
 
 .song:hover {
-  background: #9c27b0;
+  background: #e8e0d0;
 }
 
 .show {
@@ -167,6 +173,7 @@ h5 {
 
 .song-wrapper {
   margin: 0 -2em 0 -2em;
+  border-top: 1px solid #1a1208;
 }
 
 .song {
@@ -178,7 +185,7 @@ h5 {
 }
 
 .song .q-icon {
-  color: #ffc23c;
+  color: #8b0000;
   opacity: 0.9;
 }
 
@@ -190,15 +197,16 @@ h5 {
 }
 
 .img-wrapper h5 {
-  box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+  box-shadow: 3px 3px 0 #1a1208;
   width: 100%;
   position: absolute;
   text-align: left;
-  color: #ffc23c;
+  color: #1a1208;
   top: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(244, 240, 232, 0.9);
   margin: 0;
   padding: 0.5em;
+  border-bottom: 2px solid #1a1208;
 }
 
 .img-wrapper img {
@@ -206,6 +214,7 @@ h5 {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: 4px 4px 0 #1a1208;
+  filter: grayscale(100%) sepia(20%);
 }
 </style>

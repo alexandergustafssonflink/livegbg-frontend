@@ -16,11 +16,12 @@
               flat
               outlined
               label="event"
+              class="nav-btn"
             ></q-btn>
           </router-link>
           <router-link to="/about">
             <q-btn
-              class="q-ml-xl"
+              class="q-ml-xl nav-btn"
               size="36px"
               no-caps
               color="secondary"
@@ -31,7 +32,7 @@
           </router-link>
           <router-link v-if="isLoggedIn" to="/admin">
             <q-btn
-              class="q-ml-xl"
+              class="q-ml-xl nav-btn"
               size="36px"
               no-caps
               color="secondary"
@@ -115,7 +116,7 @@ export default {
 }
 
 .links h3 {
-  color: #31087b;
+  color: #1a1208;
   text-align: left;
   margin-bottom: 1em;
 }
@@ -130,6 +131,7 @@ export default {
   height: 170px;
   width: 200px;
   bottom: -5em;
+  filter: grayscale(100%) sepia(30%);
 }
 
 .logo-wrapper img {
@@ -152,25 +154,30 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  filter: grayscale(100%) sepia(30%);
 }
 .logo {
   margin-top: 8px;
-  font-family: "Teko", sans-serif;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 h3 {
-  color: whitesmoke;
-  font-weight: bold;
+  color: #1a1208;
+  font-weight: 900;
+  font-family: "Playfair Display", Georgia, serif;
+  text-transform: uppercase;
 }
+
 .navbar {
-  background-color: #232323;
+  background-color: #f4f0e8;
   width: 100vw;
   display: flex;
   position: relative;
   height: 100px;
   justify-content: center;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  border-bottom: 4px double #1a1208;
+  border-top: 2px solid #1a1208;
+  box-shadow: 0 2px 0 #1a1208;
 }
 
 .inner-navbar {
@@ -196,8 +203,8 @@ h3 {
 }
 
 button.active {
-  background: #3ea39f !important;
-  color: white !important;
+  background: #8b0000 !important;
+  color: #f4f0e8 !important;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -225,14 +232,12 @@ button.active {
     transform: translateY(-11px) rotate(45deg);
   }
 
-  /* .cross :nth-child() */
-
   .hamburger.cross div {
-    border: 2px solid #31087b !important;
+    border: 2px solid #1a1208 !important;
   }
   .hamburger div {
     transition: 0.3s ease;
-    border: 2px solid #ffc23c;
+    border: 2px solid #1a1208;
     margin: 0.5em;
   }
 
@@ -240,7 +245,8 @@ button.active {
     width: 100vw;
     padding: 2em;
     height: 100%;
-    background: #ffc23c;
+    background: #f4f0e8;
+    border-left: 4px solid #1a1208;
     position: fixed;
     z-index: 900;
     transition: 0.3s ease;
@@ -255,13 +261,18 @@ button.active {
   }
 
   .navbar-mobile {
-    /* top: 0px;
-        left: 0px; */
   }
 }
 
 .logout-btn {
   font-size: 20px !important;
+}
+
+.nav-btn :deep(.q-btn__content) {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #1a1208;
 }
 
 @media only screen and (min-width: 1200px) {

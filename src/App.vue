@@ -19,18 +19,11 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap");
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap");
 
 html,
 body {
-  background-color: #131313;
+  background-color: #f4f0e8;
 }
 
 a {
@@ -38,50 +31,45 @@ a {
   color: inherit;
 }
 
-/* .bg-yellow {
-    background-color: #FFC23C !important;
-} */
-
-/* .text-yellow {
-    background-color: #FFC23C !important;
-} */
-
-.page-wrapper {
-  /* max-width: 1200px;
-    min-width: 900px; */
-  display: flex;
-  justify-content: center;
-  /* flex-direction: column; */
-}
 #app {
   display: flex;
   justify-content: center;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "EB Garamond", Georgia, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  /* color: #2c3e50; */
-  color: whitesmoke;
+  color: #1a1208;
+}
+
+.page-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 h5 {
   font-weight: 700 !important;
   opacity: 0.9;
-  color: #31087b;
+  color: #1a1208;
+  font-family: "EB Garamond", Georgia, serif;
 }
 
 h3 {
   margin: 0;
-  font-family: "Teko", sans-serif;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 900;
+  color: #1a1208;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .box {
   padding: 1.5em;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #f4f0e8;
+  box-shadow: 4px 4px 0 #1a1208;
+  border: 2px solid #1a1208;
   transition: 0.3s ease;
-  border-radius: 0.5em;
 }
+
 .container {
   min-width: 900px;
   max-width: 1400px;

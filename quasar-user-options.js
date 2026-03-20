@@ -6,14 +6,14 @@ import { Notify, Dialog } from "quasar";
 export default {
   config: {
     brand: {
-      primary: "#FFC23C",
-      secondary: "#ffedcd",
-      red: "#E36565",
-      blue: "#3E5669",
-      purple: "#31087B",
-      pink: "#FA2FB5",
-      hej: "#FFC23C",
-      black: "#100720",
+      primary: "#8b0000",
+      secondary: "#2c1a08",
+      red: "#8b0000",
+      blue: "#2c3e50",
+      purple: "#8b0000",
+      pink: "#8b0000",
+      hej: "#8b0000",
+      black: "#1a1208",
     },
     extras: [
       "material-icons",

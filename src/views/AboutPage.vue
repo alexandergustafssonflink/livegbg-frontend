@@ -32,19 +32,24 @@ export default {
   margin: 1em;
 }
 h3 {
-  color: whitesmoke;
+  color: #1a1208;
   max-width: 640px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 a {
   transition: 0.3s ease;
+  color: #8b0000;
 }
 
 a:hover {
-  color: #ffc23c;
+  color: #5a0000;
+  text-decoration: underline;
 }
 
 h4 {
-  color: whitesmoke;
+  color: #1a1208;
 }
 </style>

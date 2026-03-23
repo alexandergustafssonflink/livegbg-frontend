@@ -9,7 +9,7 @@
     <div class="controls">
       <!-- Desktop filter tabs -->
       <div class="filter-bar-desktop">
-        <span class="filter-label">FILTER BY SCENE:</span>
+        <span class="filter-label">FILTRERA PÅ PLATS:</span>
         <button
           :class="['filter-tab', place === '' ? 'active' : '']"
           @click="place = ''"

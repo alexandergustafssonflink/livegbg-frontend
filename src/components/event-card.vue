@@ -206,11 +206,31 @@ export default {
 
 @media (max-width: 500px) {
   .event-row {
-    grid-template-columns: 6rem 1fr;
+    grid-template-columns: 5.5rem 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "meta title"
+      "meta place";
+    gap: 0 0.75rem;
+  }
+
+  .row-meta {
+    grid-area: meta;
+    align-self: start;
+    padding-top: 0.15rem;
+  }
+
+  .row-title {
+    grid-area: title;
+    white-space: normal;
   }
 
   .row-place {
-    display: none;
+    grid-area: place;
+    text-align: left;
+    margin-top: 0.15rem;
+    font-size: 0.65rem;
+    color: #aaa;
   }
 }
 </style>

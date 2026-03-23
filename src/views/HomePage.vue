@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <header class="page-header">
-      <h1 class="page-title">THE GIG WALL.</h1>
+      <h1 class="page-title">Livemusik i Göteborg</h1>
       <p v-if="lastFetch" class="last-fetch">Senast uppdaterad: {{ lastFetch }}</p>
     </header>
 
@@ -28,24 +28,77 @@
       <!-- Mobile filter select -->
       <div class="filter-bar-mobile">
         <select v-model="place" class="place-select">
-          <option value="">ALLA PLATSER</option>
+          <option value="">Alla platser</option>
           <option v-for="p in placesOptions" :key="p" :value="p">
             {{ p }}
           </option>
         </select>
       </div>
 
-      <!-- Search bar -->
-      <div class="search-bar">
-        <input
-          type="text"
-          v-model="search"
-          placeholder="Sök event..."
-          class="search-input"
-          aria-label="Sök event"
-        />
-        <button v-if="search" class="search-clear" @click="search = ''" aria-label="Rensa sökning">
-          ×
+      <!-- Date range + search row -->
+      <div class="filter-row">
+        <div class="date-range">
+          <div class="date-input-wrapper">
+            <label class="date-label">FRÅN</label>
+            <input
+              type="date"
+              v-model="dateFrom"
+              class="date-input"
+              aria-label="Datum från"
+            />
+          </div>
+          <div class="date-input-wrapper">
+            <label class="date-label">TILL</label>
+            <input
+              type="date"
+              v-model="dateTo"
+              class="date-input"
+              aria-label="Datum till"
+            />
+          </div>
+          <button
+            v-if="dateFrom || dateTo"
+            class="clear-dates"
+            @click="dateFrom = ''; dateTo = ''"
+            aria-label="Rensa datum"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="search-bar">
+          <input
+            type="text"
+            v-model="search"
+            placeholder="Sök event..."
+            class="search-input"
+            aria-label="Sök event"
+          />
+          <button
+            v-if="search"
+            class="search-clear"
+            @click="search = ''"
+            aria-label="Rensa sökning"
+          >
+            ×
+          </button>
+        </div>
+
+        <!-- Compact mode toggle -->
+        <button
+          :class="['compact-toggle', compactMode ? 'compact-toggle--on' : '']"
+          @click="compactMode = !compactMode"
+          :aria-pressed="compactMode"
+          title="Kompakt läge"
+        >
+          <span class="compact-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="0" y="2" width="16" height="2" fill="currentColor" />
+              <rect x="0" y="7" width="16" height="2" fill="currentColor" />
+              <rect x="0" y="12" width="16" height="2" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="compact-label">Kompakt</span>
         </button>
       </div>
     </div>
@@ -56,11 +109,15 @@
     </div>
 
     <!-- Events grid -->
-    <div v-else-if="filteredEvents.length" class="events-grid">
+    <div
+      v-else-if="filteredEvents.length"
+      :class="compactMode ? 'events-list' : 'events-grid'"
+    >
       <EventCard
         v-for="(event, i) in filteredEvents"
         :key="i"
         :event="event"
+        :compact="compactMode"
         @show-event-info="showEventBar"
       />
     </div>
@@ -106,9 +163,12 @@ export default {
       chosenEvent: null,
       search: "",
       place: "",
+      dateFrom: "",
+      dateTo: "",
       placesOptions: [],
       allEvents: [],
       lastFetch: "",
+      compactMode: false,
     };
   },
   computed: {
@@ -120,6 +180,14 @@ export default {
       if (this.search) {
         const q = this.search.toLowerCase();
         events = events.filter((e) => e.title.toLowerCase().includes(q));
+      }
+      if (this.dateFrom) {
+        const from = new Date(this.dateFrom).getTime();
+        events = events.filter((e) => e._ts >= from);
+      }
+      if (this.dateTo) {
+        const to = new Date(this.dateTo).getTime();
+        events = events.filter((e) => e._ts <= to);
       }
       events.sort((a, b) => new Date(a.date) - new Date(b.date));
       return events;
@@ -139,7 +207,11 @@ export default {
             (event) =>
               new Date(event.date.split("T")[0]).getTime() >=
               new Date(today).getTime()
-          );
+          )
+          .map((event) => ({
+            ...event,
+            _ts: new Date(event.date.split("T")[0]).getTime(),
+          }));
         this.placesOptions = [
           ...new Set(this.allEvents.map((e) => e.place).filter(Boolean)),
         ];
@@ -179,8 +251,8 @@ export default {
 .page-title {
   font-family: "Playfair Display", serif;
   font-weight: 900;
-  font-size: clamp(3.5rem, 11vw, 9rem);
-  line-height: 0.93;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 1;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #1a1a1a;
@@ -254,14 +326,75 @@ export default {
 .place-select {
   background: transparent;
   border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
   cursor: pointer;
   color: #1a1a1a;
   width: 100%;
   appearance: auto;
+  margin: 0;
+}
+
+/* Date range + search row */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.date-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.date-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.date-input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  padding: 0.3rem 0;
+  font-size: 0.78rem;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.date-input:focus {
+  border-bottom-color: #1a1a1a;
+}
+
+.clear-dates {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #aaa;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.clear-dates:hover {
+  color: #cc1100;
 }
 
 /* Search */
@@ -269,7 +402,8 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  max-width: 320px;
+  flex: 1;
+  max-width: 280px;
 }
 
 .search-input {
@@ -286,10 +420,9 @@ export default {
 }
 
 .search-input::placeholder {
-  color: #bbb;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
+  color: #999;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
 }
 
 .search-input:focus {
@@ -311,6 +444,40 @@ export default {
 
 .search-clear:hover {
   color: #cc1100;
+}
+
+/* Compact toggle */
+.compact-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #888;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.compact-toggle:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.compact-toggle--on {
+  border-color: #cc1100;
+  color: #cc1100;
+}
+
+.compact-icon {
+  display: flex;
+  align-items: center;
 }
 
 /* Loading */
@@ -341,6 +508,13 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem 2rem;
+}
+
+/* Compact list */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e0d9d0;
 }
 
 /* No events */
@@ -402,8 +576,19 @@ export default {
     display: block;
   }
 
+  .filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
   .search-bar {
     max-width: 100%;
+    width: 100%;
+  }
+
+  .date-range {
+    width: 100%;
   }
 
   .event-sidebar {

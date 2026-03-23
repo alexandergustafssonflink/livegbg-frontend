@@ -1,5 +1,13 @@
 <template>
-  <div class="event-card" @click="handleCardClick">
+  <!-- Compact (list) mode -->
+  <div v-if="compact" class="event-row" @click="handleCardClick">
+    <span class="row-meta">{{ formattedDate }}</span>
+    <span class="row-title">{{ event.title }}</span>
+    <span class="row-place">{{ event.place }}</span>
+  </div>
+
+  <!-- Normal card mode -->
+  <div v-else class="event-card" @click="handleCardClick">
     <div class="card-image-wrapper">
       <img
         v-if="event.place === 'Valand'"
@@ -32,6 +40,10 @@ export default {
     event: {
       type: Object,
       required: true,
+    },
+    compact: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -71,6 +83,7 @@ export default {
 </script>
 
 <style scoped>
+/* ── Normal card ── */
 .event-card {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -102,7 +115,7 @@ export default {
 }
 
 .card-body {
-  padding: 0.75rem 0 0;
+  padding: 0.75rem 0.25rem 0;
 }
 
 .event-title {
@@ -136,5 +149,70 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ── Compact row ── */
+.event-row {
+  display: grid;
+  grid-template-columns: 7rem 1fr 8rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.25rem;
+  border-bottom: 1px solid #e0d9d0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.event-row:hover {
+  background: rgba(204, 17, 0, 0.04);
+}
+
+.event-row:hover .row-title {
+  color: #cc1100;
+}
+
+.row-meta {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  white-space: nowrap;
+}
+
+.row-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #1a1a1a;
+  transition: color 0.15s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-place {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaa;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 500px) {
+  .event-row {
+    grid-template-columns: 6rem 1fr;
+  }
+
+  .row-place {
+    display: none;
+  }
+}
 </style>
+
 

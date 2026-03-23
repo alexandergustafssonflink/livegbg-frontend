@@ -182,13 +182,11 @@ export default {
   flex-direction: column;
   padding: 1.5rem 2rem;
   gap: 1.25rem;
-  transform: translateY(-100%);
-  transition: transform 0.25s ease;
   z-index: 99;
 }
 
 .mobile-menu.show {
-  transform: translateY(0);
+  display: flex;
 }
 
 .mobile-link {
@@ -211,10 +209,6 @@ export default {
   }
 
   .hamburger {
-    display: flex;
-  }
-
-  .mobile-menu {
     display: flex;
   }
 }

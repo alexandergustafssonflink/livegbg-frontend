@@ -2,7 +2,8 @@
   <div class="home-page">
     <header class="page-header">
       <h1 class="page-title">Livemusik i Göteborg</h1>
-      <p v-if="lastFetch" class="last-fetch">Senast uppdaterad: {{ lastFetch }}</p>
+      <p v-if="!isLoading && lastFetch" class="last-fetch">Senast uppdaterad: {{ lastFetch }}</p>
+      <div v-else-if="isLoading" class="skeleton skeleton-last-fetch"></div>
     </header>
 
     <div class="controls">
@@ -103,9 +104,17 @@
       </div>
     </div>
 
-    <!-- Loading state -->
-    <div v-if="isLoading" class="loading">
-      <div class="loading-spinner"></div>
+    <!-- Skeleton loading state -->
+    <div v-if="isLoading" class="events-grid">
+      <div v-for="n in 9" :key="n" class="skeleton-card">
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-title skeleton-title--short"></div>
+          <div class="skeleton skeleton-meta"></div>
+          <div class="skeleton skeleton-desc"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Events grid -->
@@ -480,27 +489,65 @@ export default {
   align-items: center;
 }
 
-/* Loading */
-.loading {
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #e8e2d9 25%,
+    #f0ece4 50%,
+    #e8e2d9 75%
+  );
+  background-size: 1200px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 2px;
+}
+
+.skeleton-last-fetch {
+  width: 14rem;
+  height: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.skeleton-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 40vh;
+  flex-direction: column;
 }
 
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #e0d9d0;
-  border-top-color: #cc1100;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 2px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.skeleton-body {
+  padding: 0.75rem 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.skeleton-title {
+  height: 1rem;
+  width: 90%;
+}
+
+.skeleton-title--short {
+  width: 55%;
+}
+
+.skeleton-meta {
+  height: 0.7rem;
+  width: 70%;
+}
+
+.skeleton-desc {
+  height: 0.7rem;
+  width: 85%;
 }
 
 /* Events grid */

@@ -371,7 +371,7 @@ export default {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #aaa;
+  color: #555;
   white-space: nowrap;
 }
 
@@ -429,7 +429,7 @@ export default {
 }
 
 .search-input::placeholder {
-  color: #999;
+  color: #666;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
 }
@@ -457,6 +457,7 @@ export default {
 
 /* Compact toggle */
 .compact-toggle {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 0.4rem;

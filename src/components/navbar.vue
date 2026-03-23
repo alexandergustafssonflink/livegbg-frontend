@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-inner">
-      <router-link to="/" class="logo">LIVEGBG</router-link>
+      <router-link to="/" class="logo">LIVEGBG.se</router-link>
       <div class="nav-links">
         <router-link to="/" class="nav-link" :class="{ active: $route.path === '/' }"
           >Event</router-link

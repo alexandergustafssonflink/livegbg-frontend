@@ -611,6 +611,13 @@ export default {
     padding: 2rem 1rem 4rem;
   }
 
+  /* Prevent iOS Safari from zooming on input focus */
+  .search-input,
+  .date-input,
+  .place-select {
+    font-size: 16px;
+  }
+
   .events-grid {
     grid-template-columns: 1fr;
     gap: 2rem;

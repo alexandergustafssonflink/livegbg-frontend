@@ -1,784 +1,652 @@
 <template>
-  <div>
-    <div class="logo-wrapper q-mt-sm" :class="isLoading ? 'pulsating' : ''">
-      <img src="@/assets/live-gbg-logo.png" alt="" />
-    </div>
+  <div class="home-page">
+    <header class="page-header">
+      <h1 class="page-title">Livemusik i Göteborg</h1>
+      <p v-if="!isLoading && lastFetch" class="last-fetch">Senast uppdaterad: {{ lastFetch }}</p>
+      <div v-else-if="isLoading" class="skeleton skeleton-last-fetch"></div>
+    </header>
 
-    <p class="last-fetch q-mb-none" v-if="!isLoading">
-      Senast uppdaterad: {{ lastFetch }}
-    </p>
-
-    <div class="filter q-mt-md" :class="showFilter ? 'show' : 'hide'">
-      <div class="search">
-        <q-input
-          dark
-          v-model="search"
-          label-color="primary"
-          label="Sök event"
-          @blur="search == '' ? (searchWord = '') : ''"
+    <div class="controls">
+      <!-- Desktop filter tabs -->
+      <div class="filter-bar-desktop">
+        <span class="filter-label">FILTRERA PÅ PLATS:</span>
+        <button
+          :class="['filter-tab', place === '' ? 'active' : '']"
+          @click="place = ''"
         >
-          <template v-slot:append>
-            <q-icon
-              color="primary"
-              name="close"
-              @click="
-                search = '';
-                searchWord = '';
-              "
-              class="cursor-pointer"
-            />
-          </template>
-        </q-input>
-        <q-btn
-          no-caps
-          label="SÖK"
-          @click="searchWord = search"
-          outline
-          color="primary"
-        ></q-btn>
+          ALL
+        </button>
+        <button
+          v-for="p in placesOptions"
+          :key="p"
+          :class="['filter-tab', place === p ? 'active' : '']"
+          @click="place = p"
+        >
+          {{ p.toUpperCase() }}
+        </button>
       </div>
-      <q-btn
-        icon="close"
-        size="xl"
-        flat
-        class="filter-close-btn"
-        @click="showFilter = false"
-      ></q-btn>
-      <h5>Filter</h5>
-      <q-select
-        dark
-        class="place-select q-mr-md"
-        v-model="place"
-        :options="placesOptions"
-        label="Plats"
-        color="primary"
-      >
-        <template v-slot:prepend>
-          <q-icon color="primary" name="place" @click.stop.prevent />
-        </template>
-        <template v-slot:append>
-          <q-icon
-            v-if="place"
-            name="close"
-            @click.stop.prevent="place = ''"
-            class="cursor-pointer"
+
+      <!-- Mobile filter select -->
+      <div class="filter-bar-mobile">
+        <select v-model="place" class="place-select">
+          <option value="">Alla platser</option>
+          <option v-for="p in placesOptions" :key="p" :value="p">
+            {{ p }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Date range + search row -->
+      <div class="filter-row">
+        <div class="date-range">
+          <div class="date-input-wrapper">
+            <label class="date-label">FRÅN</label>
+            <input
+              type="date"
+              v-model="dateFrom"
+              class="date-input"
+              aria-label="Datum från"
+            />
+          </div>
+          <div class="date-input-wrapper">
+            <label class="date-label">TILL</label>
+            <input
+              type="date"
+              v-model="dateTo"
+              class="date-input"
+              aria-label="Datum till"
+            />
+          </div>
+          <button
+            v-if="dateFrom || dateTo"
+            class="clear-dates"
+            @click="dateFrom = ''; dateTo = ''"
+            aria-label="Rensa datum"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="search-bar">
+          <input
+            type="text"
+            v-model="search"
+            placeholder="Sök event..."
+            class="search-input"
+            aria-label="Sök event"
           />
-        </template>
-      </q-select>
-      <q-input
-        v-model="dateFrom"
-        class="q-mr-md search-date"
-        color="primary"
-        label-color="primary"
-        label="Datum från"
-        placeholder="Anytime (XXXX-XX-XX)"
-      >
-        <template v-slot:append>
-          <q-icon name="event" size="lg" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date dark v-model="dateFrom" mask="YYYY-MM-DD">
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
-      <q-input
-        v-model="dateTo"
-        class="search-date"
-        label-color="primary"
-        label="Datum till"
-        placeholder="Anytime (XXXX-XX-XX)"
-      >
-        <template v-slot:append>
-          <q-icon name="event" size="lg" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date dark v-model="dateTo" mask="YYYY-MM-DD">
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
-      <div class="mobile-filter-btns">
-        <q-btn
-          no-caps
-          class="clear-filter"
-          :disable="!dateFrom && !dateTo && !place"
-          label="Rensa filter"
-          @click="
-            dateFrom = '';
-            dateTo = '';
-            place = '';
-          "
-          outline
-          color="primary"
-        ></q-btn>
-        <q-btn
-          class="results-btn"
-          no-caps
-          label="Visa resultat"
-          :disable="!dateFrom && !dateTo && !place"
-          @click="closeFilterMenu"
-          color="primary"
-        ></q-btn>
+          <button
+            v-if="search"
+            class="search-clear"
+            @click="search = ''"
+            aria-label="Rensa sökning"
+          >
+            ×
+          </button>
+        </div>
+
+        <!-- Compact mode toggle -->
+        <button
+          :class="['compact-toggle', compactMode ? 'compact-toggle--on' : '']"
+          @click="compactMode = !compactMode"
+          :aria-pressed="compactMode"
+          title="Kompakt läge"
+        >
+          <span class="compact-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="0" y="2" width="16" height="2" fill="currentColor" />
+              <rect x="0" y="7" width="16" height="2" fill="currentColor" />
+              <rect x="0" y="12" width="16" height="2" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="compact-label">Kompakt</span>
+        </button>
       </div>
     </div>
-    <div>
-      <div v-if="isLoading" class="spinner-wrapper">
-        <q-spinner-audio color="primary" size="8em" />
-      </div>
-      <div v-else class="wrapper">
-        <div class="search-mobile">
-          <q-input
-            v-model="search"
-            dark
-            color="primary"
-            label-color="primary"
-            label="Sök event"
-            @blur="search == '' ? (searchWord = '') : ''"
-          >
-            <template v-slot:append>
-              <q-icon
-                v-if="search || searchWord"
-                color="primary"
-                size="lg"
-                name="close"
-                @click="
-                  search = '';
-                  searchWord = '';
-                "
-                class="cursor-pointer"
-              />
-            </template>
-          </q-input>
-          <q-btn
-            class="q-mt-md"
-            no-caps
-            icon="search"
-            label="SÖK"
-            @click="searchWord = search"
-            outline
-            color="primary"
-          ></q-btn>
-        </div>
-        <q-btn
-          class="mobile-filter-btn"
-          no-caps
-          icon="filter_alt"
-          color="primary"
-          @click="showFilter = true"
-        ></q-btn>
-        <div v-if="eventsToday.length || events.length">
-          <h3 v-if="eventsToday.length">Event idag</h3>
-          <div class="events-today-wrapper">
-            <div class="events-today">
-              <EventCard
-                @show-artist-info="(artist) => showArtistBar(artist)"
-                @show-event-info="(e) => showEventBar(e)"
-                :event="event"
-                v-for="(event, i) in eventsToday"
-                :key="i"
-              />
-            </div>
-          </div>
-          <h3
-            v-if="events.length"
-            :class="!eventsToday.length ? 'only-upcoming' : ''"
-          >
-            Kommande event
-          </h3>
-          <div class="event-wrapper">
-            <EventCard
-              @show-artist-info="(artist) => showArtistBar(artist)"
-              @show-event-info="(e) => showEventBar(e)"
-              :event="event"
-              v-for="(event, i) in events"
-              :key="i"
-            />
-          </div>
-        </div>
-        <div v-else class="no-events">
-          <h3>Inga event hittades</h3>
+
+    <!-- Skeleton loading state -->
+    <div v-if="isLoading" class="events-grid">
+      <div v-for="n in 9" :key="n" class="skeleton-card">
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-title skeleton-title--short"></div>
+          <div class="skeleton skeleton-meta"></div>
+          <div class="skeleton skeleton-desc"></div>
         </div>
       </div>
-      <div class="artist-menu" :class="showArtistInfo ? 'show' : 'hide'">
-        <artist-info
-          v-if="showArtistInfo"
-          :chosen-artist="chosenArtist"
-          :show-artist-info="showArtistInfo"
-          @close="showArtistInfo = false"
-        />
-      </div>
-      <div class="artist-menu" :class="showEventInfo ? 'show' : 'hide'">
-        <event-info
-          v-if="showEventInfo"
-          :chosen-event="chosenEvent"
-          :show-event-info="showEventInfo"
-          @close="showEventInfo = false"
-        />
-      </div>
+    </div>
+
+    <!-- Events grid -->
+    <div
+      v-else-if="filteredEvents.length"
+      :class="compactMode ? 'events-list' : 'events-grid'"
+    >
+      <EventCard
+        v-for="(event, i) in filteredEvents"
+        :key="i"
+        :event="event"
+        :compact="compactMode"
+        @show-event-info="showEventBar"
+      />
+    </div>
+
+    <!-- No events -->
+    <div v-else class="no-events">
+      <p>Inga event hittades</p>
+    </div>
+
+    <!-- Event info sidebar overlay -->
+    <div
+      v-if="showEventInfo"
+      class="sidebar-overlay"
+      @click="showEventInfo = false"
+    ></div>
+
+    <!-- Event info sidebar -->
+    <div class="event-sidebar" :class="showEventInfo ? 'show' : ''">
+      <event-info
+        v-if="showEventInfo"
+        :chosen-event="chosenEvent"
+        @close="showEventInfo = false"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import ArtistInfo from "@/components/artist-info.vue";
 import EventInfo from "@/components/event-info.vue";
 import EventCard from "@/components/event-card.vue";
 
 export default {
   name: "HomePage",
   components: {
-    ArtistInfo,
     EventCard,
     EventInfo,
+  },
+  data() {
+    return {
+      isLoading: true,
+      showEventInfo: false,
+      chosenEvent: null,
+      search: "",
+      place: "",
+      dateFrom: "",
+      dateTo: "",
+      placesOptions: [],
+      allEvents: [],
+      lastFetch: "",
+      compactMode: false,
+    };
+  },
+  computed: {
+    filteredEvents() {
+      let events = [...this.allEvents];
+      if (this.place) {
+        events = events.filter((e) => e.place === this.place);
+      }
+      if (this.search) {
+        const q = this.search.toLowerCase();
+        events = events.filter((e) => e.title.toLowerCase().includes(q));
+      }
+      if (this.dateFrom) {
+        const from = new Date(this.dateFrom).getTime();
+        events = events.filter((e) => e._ts >= from);
+      }
+      if (this.dateTo) {
+        const to = new Date(this.dateTo).getTime();
+        events = events.filter((e) => e._ts <= to);
+      }
+      events.sort((a, b) => new Date(a.date) - new Date(b.date));
+      return events;
+    },
   },
   methods: {
     async getEvents() {
       this.isLoading = true;
-      const { data } = await axios.get(
-        process.env.VUE_APP_API_URL + "events/gbg"
-      );
-      const today = new Date().toJSON().split("T")[0];
-      this.allEvents = data[0].events
-        .filter((event) => !event.title.toLowerCase().includes("inställt"))
-        .filter(
-          (event) =>
-            new Date(event.date.split("T")[0]).getTime() >=
-            new Date(today).getTime()
+      try {
+        const { data } = await axios.get(
+          process.env.VUE_APP_API_URL + "events/gbg"
         );
-      this.placesOptions = Array.from(
-        new Set(
-          this.allEvents.reduce((acc, event) => {
-            acc.push(event.place);
-            return acc;
-          }, [])
-        )
-      );
-
-      this.lastFetch =
-        data[0].date.split("T")[0] +
-        " " +
-        data[0].date.split("T")[1].split(".")[0];
-      this.isLoading = false;
-    },
-    closeFilterMenu() {
-      window.scrollTo(0, 0);
-      this.showFilter = false;
-    },
-    showArtistBar(artist) {
-      this.showArtistInfo = true;
-      this.chosenArtist = artist;
+        const today = new Date().toJSON().split("T")[0];
+        this.allEvents = data[0].events
+          .filter((event) => !event.title.toLowerCase().includes("inställt"))
+          .filter(
+            (event) =>
+              new Date(event.date.split("T")[0]).getTime() >=
+              new Date(today).getTime()
+          )
+          .map((event) => ({
+            ...event,
+            _ts: new Date(event.date.split("T")[0]).getTime(),
+          }));
+        this.placesOptions = [
+          ...new Set(this.allEvents.map((e) => e.place).filter(Boolean)),
+        ];
+        this.lastFetch =
+          data[0].date.split("T")[0] +
+          " " +
+          data[0].date.split("T")[1].split(".")[0];
+      } catch (err) {
+        console.error("Failed to fetch events:", err.message || err);
+      } finally {
+        this.isLoading = false;
+      }
     },
     showEventBar(event) {
-      this.showEventInfo = true;
       this.chosenEvent = event;
-    },
-  },
-  data() {
-    return {
-      // events: [],
-      isLoading: Boolean,
-      showArtistInfo: false,
-      showEventInfo: false,
-      chosenArtist: "",
-      chosenEvent: "",
-      search: "",
-      searchWord: "",
-      place: "",
-      placesOptions: [],
-      dateFrom: "",
-      dateTo: "",
-      showFilter: false,
-      allEvents: [],
-      lastFetch: "",
-    };
-  },
-  computed: {
-    events() {
-      const today = new Date().toJSON().split("T")[0];
-      if (this.dateFrom || this.dateTo || this.place || this.searchWord) {
-        const timestampFrom = this.dateFrom
-          ? new Date(this.dateFrom).getTime()
-          : 0;
-        const timestampTo = this.dateTo
-          ? new Date(this.dateTo).getTime()
-          : 1649808000000212;
-
-        let events = this.allEvents.filter((event) => {
-          let timestamp = new Date(event.date.split("T")[0]).getTime();
-          if (timestamp >= timestampFrom && timestamp <= timestampTo) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        events = events
-          .filter((event) => event.place.includes(this.place))
-          .filter((event) => event.date.split("T")[0] !== today);
-        events = events.filter((event) =>
-          event.title.toLowerCase().includes(this.searchWord.toLowerCase())
-        );
-        events.sort(function (a, b) {
-          return new Date(a.date) - new Date(b.date);
-        });
-        return events;
-      } else {
-        let events = this.allEvents.filter(
-          (event) => event.date.split("T")[0] != today
-        );
-        events.sort(function (a, b) {
-          return new Date(a.date) - new Date(b.date);
-        });
-        return events;
-      }
-    },
-    eventsToday() {
-      const today = new Date().toJSON().split("T")[0];
-      let events = this.allEvents.filter(
-        (event) => event.date.split("T")[0] == today
-      );
-      if (
-        this.dateFrom !== "" ||
-        this.dateTo !== "" ||
-        this.place !== "" ||
-        this.searchWord !== ""
-      ) {
-        const timestampFrom = this.dateFrom
-          ? new Date(this.dateFrom).getTime()
-          : 0;
-        const timestampTo = this.dateTo
-          ? new Date(this.dateTo).getTime()
-          : 1649808000000212;
-        let events = this.allEvents.filter((event) => {
-          let timestamp = new Date(event.date.split("T")[0]).getTime();
-          if (timestamp >= timestampFrom && timestamp <= timestampTo) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        events = events
-          .filter((event) => event.place.includes(this.place))
-          .filter((event) => event.date.split("T")[0] === today);
-        events = events.filter((event) =>
-          event.title.toLowerCase().includes(this.searchWord.toLowerCase())
-        );
-        return events;
-      } else {
-        return events;
-      }
+      this.showEventInfo = true;
     },
   },
   async created() {
     await this.getEvents();
-    this.events.sort(function (a, b) {
-      return new Date(a.date) - new Date(b.date);
-    });
-
-    // const today = new Date().toJSON().split("T")[0];
-    // console.log(typeof today);
-
-    // this.eventsToday = this.allEvents.filter(event => event.date.split('T')[0] == today)
-    // this.events = this.allEvents.filter(event => event.date.split('T')[0] != today)
   },
 };
 </script>
 
 <style scoped>
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1); /* Ursprunglig storlek */
-    opacity: 1; /* Full opacitet */
-  }
-  50% {
-    transform: scale(0.7); /* Större storlek */
-    opacity: 0.85; /* Lite genomskinlig */
-  }
+.home-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
 }
 
-.pulsating {
-  display: inline-block; /* Gör att div-taggen kan transformeras */
-  animation: pulse 2s infinite; /* Loopa animationen oändligt */
-}
-h1 {
-  font-weight: bold;
-  font-size: 36px;
-  color: whitesmoke;
-}
-h3 {
-  font-weight: bold;
-  margin: 1em 1em 0em 1em;
-  color: whitesmoke;
-  text-align: center;
+/* Header */
+.page-header {
+  margin-bottom: 2.5rem;
 }
 
-.event-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.events-today {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.events-today .image-wrapper {
-  height: 250px;
-}
-
-.event-card {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  width: 400px;
-  height: 340px;
-  border-radius: 0.25em;
-  margin: 2em;
-  position: relative;
-  background-color: whitesmoke;
-}
-
-.image-wrapper {
-  width: 100%;
-  height: 200px;
-  position: relative;
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-h5 {
-  text-align: left;
-  margin: 0;
-  max-height: 2.8em;
-  max-width: 280px;
-  overflow: hidden;
-}
-
-.spinner-wrapper {
-  margin-top: 2em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.info-btn {
-  position: absolute;
-  bottom: 1em;
-  left: 2em;
-}
-
-.event-btn {
-  position: absolute;
-  bottom: 1em;
-  right: 2em;
-}
-/* 
-#100720
-#31087B
-#FA2FB5
-#FFC23C */
-.date {
-  position: absolute;
-  top: 0;
-  background: rgba(0, 0, 0, 0.6);
-  color: #ffc23c;
-  width: 100%;
-  padding: 0.5em;
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.place {
-  display: flex;
-  align-items: center;
-}
-.info-wrapper {
-  padding: 1em 2em;
-}
-
-.info-wrapper p {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: left;
-}
-
-.artist-menu {
-  height: 100vh;
-  width: 400px;
-  position: fixed;
-  transition: 0.3s ease;
-  background: #31087b;
-}
-
-.artist-menu.show {
-  left: 0px;
-  top: 0px;
-  transition: 0.3 ease;
-  z-index: 2000;
-}
-
-.hide {
-  top: 0px;
-  left: -100vw;
-  transition: 0.3 ease;
-}
-
-.search {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-right: solid 3px whitesmoke;
-  padding-right: 3em;
-  margin-right: 3em;
-}
-
-.search .q-btn {
-  margin-left: 1em;
-}
-
-.filter {
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  margin-top: 5em;
-}
-
-.filter h5 {
-  color: whitesmoke;
-  margin-right: 1em;
-}
-
-.filter :deep(input) {
-  color: whitesmoke;
-}
-
-.filter :deep(select span) {
-  color: whitesmoke;
-}
-
-.search-date i {
-  color: #ffc23c;
-}
-
-.place-select {
-  width: 200px;
+.page-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
 }
 
 .last-fetch {
-  opacity: 0.4;
-}
-@media only screen and (min-width: 1200px) {
-  .logo-wrapper {
-    display: none;
-  }
-  .title-header {
-    margin-bottom: 0;
-  }
-  .last-fetch {
-    display: none;
-  }
-  .mobile-filter-btn {
-    display: none;
-  }
-  .filter-close-btn {
-    display: none;
-  }
-  .results-btn {
-    display: none;
-  }
-
-  .clear-filter {
-    margin-left: 1em;
-  }
-
-  .search-mobile {
-    display: none;
-  }
+  font-size: 0.7rem;
+  color: #aaa;
+  letter-spacing: 0.05em;
 }
 
-@media only screen and (max-width: 1200px) {
-  .title-header {
-    line-height: 1em;
-    margin: 2em 0.25em 0 0.25em;
+/* Controls */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  border-top: 1px solid #e0d9d0;
+  padding-top: 1.25rem;
+}
+
+/* Desktop filter tabs */
+.filter-bar-desktop {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.filter-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-right: 1rem;
+  white-space: nowrap;
+}
+
+.filter-tab {
+  background: none;
+  border: none;
+  padding: 0.2rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.15s ease;
+  margin-right: 1.25rem;
+  border-bottom: 2px solid transparent;
+  line-height: 1.6;
+}
+
+.filter-tab:hover {
+  color: #cc1100;
+}
+
+.filter-tab.active {
+  color: #cc1100;
+  border-bottom-color: #cc1100;
+}
+
+/* Mobile filter */
+.filter-bar-mobile {
+  display: none;
+}
+
+.place-select {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: #1a1a1a;
+  width: 100%;
+  appearance: auto;
+  margin: 0;
+}
+
+/* Date range + search row */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.date-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.date-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #555;
+  white-space: nowrap;
+}
+
+.date-input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  padding: 0.3rem 0;
+  font-size: 0.78rem;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.date-input:focus {
+  border-bottom-color: #1a1a1a;
+}
+
+.clear-dates {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #aaa;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.clear-dates:hover {
+  color: #cc1100;
+}
+
+/* Search */
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 280px;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  padding: 0.4rem 2rem 0.4rem 0;
+  font-size: 0.8rem;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s ease;
+  letter-spacing: 0.03em;
+}
+
+.search-input::placeholder {
+  color: #666;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.search-input:focus {
+  border-bottom-color: #1a1a1a;
+}
+
+.search-clear {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #aaa;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.search-clear:hover {
+  color: #cc1100;
+}
+
+/* Compact toggle */
+.compact-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #888;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.compact-toggle:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.compact-toggle--on {
+  border-color: #cc1100;
+  color: #cc1100;
+}
+
+.compact-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #e8e2d9 25%,
+    #f0ece4 50%,
+    #e8e2d9 75%
+  );
+  background-size: 1200px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 2px;
+}
+
+.skeleton-last-fetch {
+  width: 14rem;
+  height: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 2px;
+}
+
+.skeleton-body {
+  padding: 0.75rem 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.skeleton-title {
+  height: 1rem;
+  width: 90%;
+}
+
+.skeleton-title--short {
+  width: 55%;
+}
+
+.skeleton-meta {
+  height: 0.7rem;
+  width: 70%;
+}
+
+.skeleton-desc {
+  height: 0.7rem;
+  width: 85%;
+}
+
+/* Events grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem 2rem;
+}
+
+/* Compact list */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e0d9d0;
+}
+
+/* No events */
+.no-events {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #aaa;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Sidebar overlay */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999;
+}
+
+/* Event info sidebar */
+.event-sidebar {
+  position: fixed;
+  left: -480px;
+  top: 0;
+  width: 440px;
+  height: 100vh;
+  z-index: 1000;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+
+.event-sidebar.show {
+  left: 0;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .home-page {
+    padding: 2rem 1rem 4rem;
   }
 
-  .search {
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .filter-bar-desktop {
     display: none;
   }
 
-  .search-mobile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .filter-bar-mobile {
+    display: block;
+  }
+
+  .filter-row {
     flex-direction: column;
-    margin: 1em;
-    margin-top: 2em;
+    align-items: flex-start;
+    gap: 0.85rem;
   }
 
-  .no-events {
+  .search-bar {
+    max-width: 100%;
     width: 100%;
   }
 
-  .wrapper {
-    width: 100vw;
-  }
-
-  .search-mobile :deep(input) {
-    color: whitesmoke;
-  }
-
-  .search-mobile :deep(select span) {
-    color: whitesmoke;
-  }
-
-  .search-mobile label {
+  .date-range {
     width: 100%;
   }
 
-  .search-mobile .q-btn {
+  .event-sidebar {
     width: 100%;
-  }
-  .events-today .event-card {
-    width: 100%;
-    height: 340px;
+    left: -100%;
   }
 
-  .events-today .image-wrapper {
-    height: 200px;
-  }
-  .artist-menu {
-    height: 100%;
-    width: 100vw;
-  }
-  .event-card {
-    width: 100%;
-    margin: 1em;
-  }
-
-  /* .events-today-wrapper h3 {
-        margin-top: 2em;
-    } */
-
-  h3 {
-    margin: 0.5em;
-  }
-
-  .filter {
-    height: 100%;
-    width: 100vw;
-    background-color: #100720;
-    justify-content: inherit;
-    padding-top: 5em;
-    position: fixed;
-    top: 0;
-    z-index: 2000;
-    margin-top: 0;
-    flex-direction: column;
-    transition: 0.3s ease;
-    padding: 5em 2em 2em 2em;
-  }
-
-  .filter .q-mr-md {
-    margin-right: 0;
-  }
-
-  .filter-close-btn {
-    top: 0em;
-    right: 0em;
-    position: absolute;
-  }
-
-  .mobile-filter-btn {
-    position: fixed;
-    bottom: 2em;
-    left: 2em;
-    z-index: 500;
-  }
-
-  .mobile-filter-btns {
-    margin-top: 2em;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .clear-filter {
-    margin-right: 0.25em;
-  }
-
-  .results-btn {
-    margin-left: 0.25em;
-  }
-
-  .show {
+  .event-sidebar.show {
     left: 0;
-  }
-
-  .hide {
-    transition: 0.3s ease;
-    left: -100vw;
-  }
-
-  .place-select {
-    width: 100%;
-  }
-
-  .filter h5 {
-    margin-right: 0;
-    font-size: 36px;
-    margin-bottom: 1em;
-  }
-
-  .filter label {
-    width: 100%;
-    margin-top: 1em;
-  }
-  /* 
-    .only-upcoming  {
-        margin-top: 70px;
-    } */
-
-  .q-date {
-    width: 90vw;
-    height: 80vh;
-  }
-}
-
-@media only screen and (min-width: 900px) {
-  .events-today .event-container {
-    width: 40%;
-  }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 1200px) {
-  .wrapper {
-    padding: 0 2em;
   }
 }
 </style>
+

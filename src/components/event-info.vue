@@ -1,46 +1,42 @@
 <template>
-  <div class="menu">
-    <q-btn
-      flat
-      @click="this.$emit('close')"
-      size="xl"
-      class="close-btn"
-      icon="close"
-    ></q-btn>
-    <div>
-      <div v-if="chosenEvent">
-        <h3 class="q-mt-xl q-mb-lg">Event info</h3>
-        <div class="img-wrapper">
-          <h5 class="artist-name">
-            {{ chosenEvent.title }}
-          </h5>
-          <p></p>
-          <img :src="chosenEvent.imageUrl" alt="" />
-        </div>
-        <div>
-          <p :style="{ fontSize: '20px' }">{{ chosenEvent.eventInfo }}</p>
-          <h5 class="flex justify-between" :style="{ fontSize: '20px' }">
-            <span>PLATS:</span> <span>{{ chosenEvent.place }}</span>
-          </h5>
-          <h5 class="flex justify-between" :style="{ fontSize: '20px' }">
-            <span>DATUM</span> <span>{{ chosenEvent.date.split("T")[0] }}</span>
-          </h5>
-          <h5 class="flex justify-between" :style="{ fontSize: '20px' }">
-            <span>INTRÄDE:</span> <span>{{ chosenEvent.eventPrice }}</span>
-          </h5>
+  <div class="event-info-panel">
+    <button class="close-btn" @click="$emit('close')" aria-label="Stäng">×</button>
 
-          <q-btn
-            v-if="chosenEvent.ticketLink"
-            :href="normalizedTicketLink"
-            target="_blank"
-            color="purple"
-            class="q-mt-lg"
-            rel="noopener noreferrer"
-          >
-            Köp biljett
-          </q-btn>
+    <div v-if="chosenEvent" class="panel-content">
+      <div class="panel-image-wrapper">
+        <img :src="chosenEvent.imageUrl" :alt="chosenEvent.title" class="panel-image" />
+      </div>
+
+      <h2 class="panel-title">{{ chosenEvent.title }}</h2>
+
+      <div class="panel-meta">
+        <div class="meta-row">
+          <span class="meta-label">DATUM</span>
+          <span class="meta-value">{{ chosenEvent.date.split("T")[0] }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">PLATS</span>
+          <span class="meta-value">{{ chosenEvent.place }}</span>
+        </div>
+        <div v-if="chosenEvent.eventPrice" class="meta-row">
+          <span class="meta-label">INTRÄDE</span>
+          <span class="meta-value">{{ chosenEvent.eventPrice }}</span>
         </div>
       </div>
+
+      <p v-if="chosenEvent.eventInfo" class="panel-description">
+        {{ chosenEvent.eventInfo }}
+      </p>
+
+      <a
+        v-if="chosenEvent.ticketLink"
+        :href="normalizedTicketLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ticket-btn"
+      >
+        Köp biljett
+      </a>
     </div>
   </div>
 </template>
@@ -48,135 +44,140 @@
 <script>
 export default {
   name: "EventInfo",
-  watch: {
-    chosenArtist() {},
-  },
-  components: {},
-  methods: {},
+  emits: ["close"],
+  props: ["chosenEvent"],
   computed: {
     normalizedTicketLink() {
       if (this.chosenEvent && this.chosenEvent.ticketLink) {
-        if (
-          this.chosenEvent.ticketLink.startsWith("http://") ||
-          this.chosenEvent.ticketLink.startsWith("https://")
-        ) {
-          return this.chosenEvent.ticketLink;
-        } else {
-          return "https://" + this.chosenEvent.ticketLink;
+        const link = this.chosenEvent.ticketLink;
+        if (link.startsWith("http://") || link.startsWith("https://")) {
+          return link;
         }
+        return "https://" + link;
       }
       return "";
     },
   },
-  props: ["chosenEvent"],
   data() {
-    return {
-      isLoading: Boolean,
-      // eventInfo: null,
-    };
+    return {};
   },
 };
 </script>
 
 <style scoped>
-.menu {
-  background: #100720;
-  color: #ffc23c;
+.event-info-panel {
+  background: #f5f0e8;
+  border-right: 1px solid #e0d9d0;
   height: 100%;
   width: 100%;
-  padding: 2em;
-  box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
-}
-
-.loading {
-  margin-top: 200px;
+  padding: 2rem;
+  overflow-y: auto;
+  position: relative;
 }
 
 .close-btn {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  cursor: pointer;
+  color: #888;
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.15s ease;
 }
 
-h3 {
-  font-weight: 700;
-  color: #ffc23c;
+.close-btn:hover {
+  color: #cc1100;
 }
 
-h5 {
-  color: #ffc23c;
-  margin: 0.25em;
+.panel-content {
+  margin-top: 2rem;
 }
 
-.artist-name {
-  color: #ffc23c;
-}
-
-.song h5 {
-  text-align: left;
-  white-space: nowrap;
-  max-width: 275px;
+.panel-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 1.25rem;
 }
 
-.song:hover {
-  background: #9c27b0;
-}
-
-.show {
-  left: 0px;
-  top: 0px;
-  transition: 0.3s ease;
-}
-
-.hide {
-  top: 0px;
-  left: -30vw;
-  transition: 0.3s ease;
-}
-
-.song-wrapper {
-  margin: 0 -2em 0 -2em;
-}
-
-.song {
-  transition: 0.2s ease;
-  padding: 0.5em 2em 0.25em 2em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.song .q-icon {
-  color: #ffc23c;
-  opacity: 0.9;
-}
-
-.img-wrapper {
-  width: 100%;
-  height: 300px;
-  position: relative;
-  margin-bottom: 1em;
-}
-
-.img-wrapper h5 {
-  box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
-  width: 100%;
-  position: absolute;
-  text-align: left;
-  color: #ffc23c;
-  top: 0;
-  background: rgba(0, 0, 0, 0.8);
-  margin: 0;
-  padding: 0.5em;
-}
-
-.img-wrapper img {
-  object-fit: cover;
+.panel-image {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  object-fit: cover;
+  filter: grayscale(100%);
+  display: block;
+}
+
+.panel-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.panel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  border-top: 1px solid #e0d9d0;
+  border-bottom: 1px solid #e0d9d0;
+  padding: 0.75rem 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.meta-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.meta-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #333;
+  text-align: right;
+}
+
+.panel-description {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.ticket-btn {
+  display: inline-block;
+  background: #cc1100;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.5rem;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.ticket-btn:hover {
+  background: #aa0e00;
 }
 </style>
+

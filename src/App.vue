@@ -1,9 +1,7 @@
 <template>
-  <div class="app-wrapper">
+  <div id="app">
     <nav-bar />
-    <div class="page-wrapper">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 
@@ -19,72 +17,31 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap");
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body {
-  background-color: #131313;
+  background-color: #f5f0e8;
+  color: #1a1a1a;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-}
-
-/* .bg-yellow {
-    background-color: #FFC23C !important;
-} */
-
-/* .text-yellow {
-    background-color: #FFC23C !important;
-} */
-
-.page-wrapper {
-  /* max-width: 1200px;
-    min-width: 900px; */
-  display: flex;
-  justify-content: center;
-  /* flex-direction: column; */
-}
-#app {
-  display: flex;
-  justify-content: center;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  /* color: #2c3e50; */
-  color: whitesmoke;
-}
-
-h5 {
-  font-weight: 700 !important;
-  opacity: 0.9;
-  color: #31087b;
-}
-
-h3 {
-  margin: 0;
-  font-family: "Teko", sans-serif;
-}
-
-.box {
-  padding: 1.5em;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  transition: 0.3s ease;
-  border-radius: 0.5em;
-}
-.container {
-  min-width: 900px;
-  max-width: 1400px;
-  margin-bottom: 3em;
 }
 </style>

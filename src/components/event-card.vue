@@ -1,66 +1,33 @@
 <template>
-  <div class="event-container">
-    <!-- Om det finns en länk, gör event-info klickbar -->
-    <template v-if="event.link">
-      <a :href="event.link">
-        <div class="event-info">
-          <h5>{{ event.title }}</h5>
-          <p class="date-place">
-            {{ event.date.split("T")[0] }} - {{ event.place }}
-          </p>
-        </div>
-      </a>
-    </template>
-    <template v-else>
-      <div class="event-info">
-        <h5>{{ event.title }}</h5>
-        <p class="date-place">
-          {{ event.date.split("T")[0] }} - {{ event.place }}
-        </p>
-      </div>
-    </template>
-    <div class="image-wrapper">
-      <template v-if="event.link">
-        <a :href="event.link">
-          <img
-            v-if="event.place == 'Valand'"
-            loading="lazy"
-            :src="`https://livegbg-test.herokuapp.com/api/proxy?url=${event.imageUrl}`"
-            alt=""
-          />
-          <img loading="lazy" v-else :src="event.imageUrl" alt="" />
-        </a>
-      </template>
-      <template v-else>
-        <img
-          v-if="event.place == 'Valand'"
-          loading="lazy"
-          :src="`https://livegbg-test.herokuapp.com/api/proxy?url=${event.imageUrl}`"
-          alt=""
-        />
-        <img loading="lazy" v-else :src="event.imageUrl" alt="" />
-      </template>
-      <div class="info-wrapper">
-        <q-btn
-          v-if="
-            !event.title.toLowerCase().includes('open stage') &&
-            !event.title.toLowerCase().includes('hängmattan') &&
-            !event.title.toLowerCase().includes('barnens ocean') &&
-            !event.title.toLowerCase().includes('barnmattan') &&
-            !event.title.toLowerCase().includes('poesi och prosa') &&
-            !event.title.toLowerCase().includes('konsert') &&
-            !event.imageUrl.toLowerCase().includes('cloudinary.com/dvyl105jb')
-          "
-          class="info-btn"
-          no-caps
-          @click="$emit('showArtistInfo', event.title)"
-        >
-          SÖK LÅTAR
-        </q-btn>
-        <q-btn color="purple" class="event-btn" no-caps @click="handleMoreInfo">
-          MER INFO
-        </q-btn>
-      </div>
+  <!-- Compact (list) mode -->
+  <div v-if="compact" class="event-row" @click="handleCardClick">
+    <span class="row-meta">{{ formattedDate }}</span>
+    <span class="row-title">{{ event.title }}</span>
+    <span class="row-place">{{ event.place }}</span>
+  </div>
+
+  <!-- Normal card mode -->
+  <div v-else class="event-card" @click="handleCardClick">
+    <div class="card-image-wrapper">
+      <img
+        v-if="event.place === 'Valand'"
+        loading="lazy"
+        :src="`https://livegbg-test.herokuapp.com/api/proxy?url=${event.imageUrl}`"
+        :alt="event.title"
+        class="card-image"
+      />
+      <img
+        v-else
+        loading="lazy"
+        :src="event.imageUrl"
+        :alt="event.title"
+        class="card-image"
+      />
+    </div>
+    <div class="card-body">
+      <h3 class="event-title">{{ event.title }}</h3>
+      <p class="event-meta">{{ formattedDate }} / {{ event.place.toUpperCase() }}</p>
+      <p v-if="event.eventInfo" class="event-description">{{ event.eventInfo }}</p>
     </div>
   </div>
 </template>
@@ -68,183 +35,204 @@
 <script>
 export default {
   name: "EventCard",
-  emits: ["showEventInfo", "showArtistInfo"],
-  components: {},
+  emits: ["showEventInfo"],
   props: {
     event: {
       type: Object,
       required: true,
     },
+    compact: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    formattedDate() {
+      if (!this.event.date) return "";
+      const months = [
+        "JAN", "FEB", "MAR", "APR", "MAJ", "JUN",
+        "JUL", "AUG", "SEP", "OKT", "NOV", "DEC",
+      ];
+      const datePart = this.event.date.split("T")[0];
+      const timePart = this.event.date.includes("T")
+        ? this.event.date.split("T")[1].substring(0, 5)
+        : "";
+      const [, month, day] = datePart.split("-");
+      const monthName = months[parseInt(month) - 1];
+      const dayNum = parseInt(day);
+      return timePart && timePart !== "00:00"
+        ? `${monthName} ${dayNum} / ${timePart}`
+        : `${monthName} ${dayNum}`;
+    },
   },
   methods: {
-    handleMoreInfo() {
-      // "this.event" refererar nu till din prop
+    handleCardClick() {
       if (this.event.link && this.event.link.trim() !== "") {
-        this.trackLink(this.event);
+        this.$gtag.event("click", {
+          event_category: this.event.place,
+          event_label: this.event.title,
+          value: this.event.link,
+        });
+        window.location = this.event.link;
       } else {
         this.$emit("showEventInfo", this.event);
       }
     },
-    trackLink(event) {
-      this.$gtag.event("click", {
-        event_category: event.place,
-        event_label: event.title,
-        value: event.link,
-      });
-
-      window.location = event.link;
-    },
   },
-  data() {
-    return {
-      // events: [],
-      isLoading: Boolean,
-      showArtistInfo: false,
-      showEventInfo: false,
-      chosenArtist: "",
-      search: "",
-    };
-  },
-  computed: {},
-  async created() {},
 };
 </script>
 
 <style scoped>
-.event-container {
-  margin: 3em 2em;
-  width: 400px;
-  /* border: 3px solid transparent; */
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.event-container .info-wrapper {
-  height: 0;
-}
-.event-container:hover .info-wrapper {
-  padding: 2em 1em;
-  display: flex;
-  opacity: 1;
-}
-
-.event-container:hover button {
-  display: block;
-}
-
-.event-container:hover {
-  /* border: 3px solid white; */
+/* ── Normal card ── */
+.event-card {
   cursor: pointer;
-}
-h5 {
-  color: whitesmoke;
-  text-align: left;
-  margin: 0;
-  max-width: 100%;
-  line-height: 1.25em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
 }
 
-.image-wrapper {
+.event-card:hover {
+  transform: rotate(2deg) translateY(-8px);
+  box-shadow: 6px 14px 28px rgba(0, 0, 0, 0.13);
+}
+
+.event-card:hover .event-title {
+  color: #cc1100;
+}
+
+.card-image-wrapper {
   width: 100%;
-  height: 500px;
-  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background-color: #d0c9c0;
 }
 
-img {
+.card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: grayscale(100%);
+  display: block;
 }
 
-.info-wrapper {
-  width: 100%;
-  height: 0;
-  transition: 0.3s ease;
-  position: absolute;
-  bottom: 0;
-  opacity: 0;
-  justify-content: space-between;
+.card-body {
+  padding: 0.75rem 0.25rem 0;
+}
+
+.event-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin-bottom: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.event-meta {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.35rem;
+}
+
+.event-description {
+  font-size: 0.8rem;
+  color: #777;
+  font-style: italic;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Compact row ── */
+.event-row {
+  display: grid;
+  grid-template-columns: 7rem 1fr 8rem;
   align-items: center;
-  background-color: rgba(16, 7, 32, 0.5);
+  gap: 1rem;
+  padding: 0.6rem 0.25rem;
+  border-bottom: 1px solid #e0d9d0;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
 
-.info-wrapper button {
-  max-height: 0;
+.event-row:hover {
+  background: rgba(204, 17, 0, 0.04);
 }
 
-.info-btn {
-  width: 40%;
-  background: #ffc23c;
-  color: black;
+.event-row:hover .row-title {
+  color: #cc1100;
 }
 
-.q-btn {
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
+.row-meta {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  white-space: nowrap;
 }
 
-.event-btn {
-  width: 40%;
-}
-.date-place {
-  color: #ffc23c;
-  width: 100%;
-  margin-top: -4px;
-  margin-bottom: 2px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  font-weight: bold;
+.row-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #1a1a1a;
+  transition: color 0.15s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-@media only screen and (min-width: 500px) {
-  h5 {
-    color: whitesmoke;
+.row-place {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaa;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 500px) {
+  .event-row {
+    grid-template-columns: 5.5rem 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "meta title"
+      "meta place";
+    gap: 0 0.75rem;
+  }
+
+  .row-meta {
+    grid-area: meta;
+    align-self: start;
+    padding-top: 0.15rem;
+  }
+
+  .row-title {
+    grid-area: title;
+    white-space: normal;
+  }
+
+  .row-place {
+    grid-area: place;
     text-align: left;
-    margin: 0;
-    max-width: 100%;
-    max-height: 1.5em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .search-mobile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    margin: 1em;
-    margin-top: 5em;
-  }
-
-  .event-container .info-wrapper {
-    display: flex;
-    padding: 2em 1em;
-    height: 50px;
-    opacity: 1;
-  }
-
-  .info-wrapper button {
-    max-height: unset;
-  }
-
-  .event-container {
-    width: 100%;
-    margin: 1em;
-  }
-
-  h3 {
-    margin: 0.5em;
-  }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 1100px) {
-  .event-container {
-    width: 40%;
+    margin-top: 0.15rem;
+    font-size: 0.65rem;
+    color: #aaa;
   }
 }
 </style>
+
+

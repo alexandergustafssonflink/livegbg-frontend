@@ -264,13 +264,13 @@ export default {
   line-height: 1;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .last-fetch {
   font-size: 0.7rem;
-  color: #aaa;
+  color: var(--color-text-faint);
   letter-spacing: 0.05em;
 }
 
@@ -280,7 +280,7 @@ export default {
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2.5rem;
-  border-top: 1px solid #e0d9d0;
+  border-top: 1px solid var(--color-border);
   padding-top: 1.25rem;
 }
 
@@ -297,7 +297,7 @@ export default {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--color-text-faint);
   margin-right: 1rem;
   white-space: nowrap;
 }
@@ -311,7 +311,7 @@ export default {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  color: #777;
+  color: var(--color-text-secondary);
   transition: color 0.15s ease;
   margin-right: 1.25rem;
   border-bottom: 2px solid transparent;
@@ -319,12 +319,12 @@ export default {
 }
 
 .filter-tab:hover {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 .filter-tab.active {
-  color: #cc1100;
-  border-bottom-color: #cc1100;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
 
 /* Mobile filter */
@@ -334,12 +334,12 @@ export default {
 
 .place-select {
   background: transparent;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-light);
   padding: 0.5rem 0.75rem;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   cursor: pointer;
-  color: #1a1a1a;
+  color: var(--color-input-text);
   width: 100%;
   appearance: auto;
   margin: 0;
@@ -371,24 +371,25 @@ export default {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #555;
+  color: var(--color-text-secondary);
   white-space: nowrap;
 }
 
 .date-input {
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--color-border-light);
   background: transparent;
   padding: 0.3rem 0;
   font-size: 0.78rem;
-  color: #1a1a1a;
+  color: var(--color-input-text);
   outline: none;
   transition: border-color 0.15s ease;
   cursor: pointer;
+  color-scheme: light dark;
 }
 
 .date-input:focus {
-  border-bottom-color: #1a1a1a;
+  border-bottom-color: var(--color-text);
 }
 
 .clear-dates {
@@ -396,14 +397,14 @@ export default {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #aaa;
+  color: var(--color-text-faint);
   line-height: 1;
   padding: 0;
   transition: color 0.15s ease;
 }
 
 .clear-dates:hover {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 /* Search */
@@ -418,24 +419,24 @@ export default {
 .search-input {
   width: 100%;
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--color-border-light);
   background: transparent;
   padding: 0.4rem 2rem 0.4rem 0;
   font-size: 0.8rem;
-  color: #1a1a1a;
+  color: var(--color-input-text);
   outline: none;
   transition: border-color 0.15s ease;
   letter-spacing: 0.03em;
 }
 
 .search-input::placeholder {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 0.78rem;
   letter-spacing: 0.06em;
 }
 
 .search-input:focus {
-  border-bottom-color: #1a1a1a;
+  border-bottom-color: var(--color-text);
 }
 
 .search-clear {
@@ -445,14 +446,14 @@ export default {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: #aaa;
+  color: var(--color-text-faint);
   line-height: 1;
   padding: 0;
   transition: color 0.15s ease;
 }
 
 .search-clear:hover {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 /* Compact toggle */
@@ -462,27 +463,27 @@ export default {
   align-items: center;
   gap: 0.4rem;
   background: none;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-light);
   padding: 0.3rem 0.65rem;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  color: #888;
+  color: var(--color-text-muted);
   transition: border-color 0.15s ease, color 0.15s ease;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .compact-toggle:hover {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
+  border-color: var(--color-text);
+  color: var(--color-text);
 }
 
 .compact-toggle--on {
-  border-color: #cc1100;
-  color: #cc1100;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .compact-icon {
@@ -499,9 +500,9 @@ export default {
 .skeleton {
   background: linear-gradient(
     90deg,
-    #e8e2d9 25%,
-    #f0ece4 50%,
-    #e8e2d9 75%
+    var(--color-skeleton-base) 25%,
+    var(--color-skeleton-highlight) 50%,
+    var(--color-skeleton-base) 75%
   );
   background-size: 1200px 100%;
   animation: shimmer 1.6s infinite linear;
@@ -562,14 +563,14 @@ export default {
 .events-list {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #e0d9d0;
+  border-top: 1px solid var(--color-border);
 }
 
 /* No events */
 .no-events {
   text-align: center;
   padding: 5rem 2rem;
-  color: #aaa;
+  color: var(--color-text-faint);
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;

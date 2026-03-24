@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar">
     <div class="navbar-inner">
-      <router-link to="/" class="logo">LIVEGBG.se</router-link>
+      <router-link to="/" class="logo">
+        <img src="@/assets/logo-2.png" alt="LIVEGBG" class="logo-image" />
+      </router-link>
       <div class="nav-links">
         <router-link to="/" class="nav-link" :class="{ active: $route.path === '/' }"
           >Event</router-link
@@ -73,7 +75,7 @@ export default {
   background-color: #f5f0e8;
   border-bottom: 1px solid #e0d9d0;
   padding: 0 2rem;
-  height: 64px;
+  height: 84px;
   display: flex;
   align-items: center;
 }
@@ -88,14 +90,16 @@ export default {
 }
 
 .logo {
-  font-family: "Playfair Display", serif;
-  font-weight: 900;
-  font-size: 1.1rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #1a1a1a;
   text-decoration: none;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -210,6 +214,14 @@ export default {
 
   .hamburger {
     display: flex;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .logo-image {
+    height: 54px;
   }
 }
 </style>

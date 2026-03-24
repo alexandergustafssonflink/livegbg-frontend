@@ -4,36 +4,38 @@
       <p class="cookie-banner__text">
         Vi använder cookies för att förbättra din upplevelse och analysera trafik på webbplatsen.
       </p>
-      <button class="cookie-banner__btn" @click="accept">Acceptera</button>
+      <div class="cookie-banner__actions">
+        <button class="cookie-banner__btn cookie-banner__btn--reject" @click="reject">Endast nödvändiga</button>
+        <button class="cookie-banner__btn cookie-banner__btn--accept" @click="accept">Acceptera</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-const STORAGE_KEY = "cookieConsent";
+import { getConsent, setConsent } from "@/utils/cookieConsent";
 
 export default {
   name: "CookieBanner",
+  emits: ["consent-accepted", "consent-rejected"],
   data() {
     return {
       visible: false,
     };
   },
   mounted() {
-    try {
-      this.visible = localStorage.getItem(STORAGE_KEY) !== "accepted";
-    } catch {
-      this.visible = false;
-    }
+    this.visible = getConsent() === "unset";
   },
   methods: {
     accept() {
-      try {
-        localStorage.setItem(STORAGE_KEY, "accepted");
-      } catch {
-        // Storage unavailable; hide banner anyway
-      }
+      setConsent("accepted");
       this.visible = false;
+      this.$emit("consent-accepted");
+    },
+    reject() {
+      setConsent("rejected");
+      this.visible = false;
+      this.$emit("consent-rejected");
     },
   },
 };
@@ -76,8 +78,13 @@ export default {
   opacity: 0.8;
 }
 
-.cookie-banner__btn {
+.cookie-banner__actions {
+  display: flex;
   flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+.cookie-banner__btn {
   background: none;
   border: 1px solid #1a1a1a;
   padding: 0.4rem 1.1rem;
@@ -101,6 +108,17 @@ export default {
   outline-offset: 2px;
 }
 
+.cookie-banner__btn--accept {
+  background-color: #1a1a1a;
+  color: #f5f0e8;
+}
+
+.cookie-banner__btn--accept:hover {
+  background-color: #cc1100;
+  border-color: #cc1100;
+  color: #fff;
+}
+
 @media (max-width: 700px) {
   .cookie-banner {
     padding: 1rem;
@@ -110,6 +128,11 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
+  }
+
+  .cookie-banner__actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }
 </style>

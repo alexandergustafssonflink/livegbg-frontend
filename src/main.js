@@ -26,15 +26,14 @@ import {
 import router from "./router/index.js";
 import VueGtag from "vue-gtag";
 
-console.log("VueGtag", VueGtag);
-
 createApp(App)
   .use(router)
   .use(VueGtag, {
+    bootstrap: false,
     config: { id: "G-W4SH1ZH8QD" },
     pageTrackerScreenviewEnabled: true,
     appName: "LiveGBG",
-  })
+  }, router)
   .use(Quasar, {
     ...quasarUserOptions,
     directives: {

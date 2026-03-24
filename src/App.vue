@@ -2,7 +2,7 @@
   <div id="app">
     <nav-bar />
     <router-view />
-    <cookie-banner />
+    <cookie-banner @consent-accepted="onConsentAccepted" @consent-rejected="onConsentRejected" />
   </div>
 </template>
 
@@ -10,6 +10,8 @@
 import NavBar from "@/components/navbar.vue";
 import CookieBanner from "@/components/cookie-banner.vue";
 import { applyDarkMode, isDarkMode } from "@/utils/darkMode";
+import { getConsent } from "@/utils/cookieConsent";
+import { bootstrap } from "vue-gtag";
 
 export default {
   name: "App",
@@ -19,6 +21,18 @@ export default {
   },
   mounted() {
     applyDarkMode(isDarkMode.value);
+    if (getConsent() === "accepted") {
+      bootstrap();
+    }
+  },
+  methods: {
+    onConsentAccepted() {
+      bootstrap();
+    },
+    // eslint-disable-next-line no-unused-vars
+    onConsentRejected() {
+      // Analytics remains blocked; handler provided for symmetry and future use
+    },
   },
 };
 </script>

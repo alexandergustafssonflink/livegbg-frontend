@@ -111,7 +111,12 @@ export default {
   height: 100%;
   object-fit: cover;
   filter: grayscale(100%);
+  transition: filter 0.3s ease;
   display: block;
+}
+
+.event-card:hover .card-image {
+  filter: grayscale(0%);
 }
 
 .card-body {

@@ -2,16 +2,19 @@
   <div id="app">
     <nav-bar />
     <router-view />
+    <cookie-banner />
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/navbar.vue";
+import CookieBanner from "@/components/cookie-banner.vue";
 
 export default {
   name: "App",
   components: {
     NavBar,
+    CookieBanner,
   },
 };
 </script>

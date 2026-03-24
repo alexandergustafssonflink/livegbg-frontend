@@ -66,13 +66,14 @@ export default {
 
 <style scoped>
 .event-info-panel {
-  background: #f5f0e8;
-  border-right: 1px solid #e0d9d0;
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-border);
   height: 100%;
   width: 100%;
   padding: 2rem;
   overflow-y: auto;
   position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .close-btn {
@@ -83,14 +84,14 @@ export default {
   border: none;
   font-size: 1.75rem;
   cursor: pointer;
-  color: #888;
+  color: var(--color-text-muted);
   line-height: 1;
   padding: 0.25rem 0.5rem;
   transition: color 0.15s ease;
 }
 
 .close-btn:hover {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 .panel-content {
@@ -119,7 +120,7 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1.15;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
@@ -128,8 +129,8 @@ export default {
   flex-direction: column;
   gap: 0.4rem;
   margin-bottom: 1.25rem;
-  border-top: 1px solid #e0d9d0;
-  border-bottom: 1px solid #e0d9d0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding: 0.75rem 0;
 }
 
@@ -145,27 +146,27 @@ export default {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--color-text-faint);
   white-space: nowrap;
 }
 
 .meta-value {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-meta-value);
   text-align: right;
 }
 
 .panel-description {
   font-size: 0.875rem;
   line-height: 1.65;
-  color: #555;
+  color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
 }
 
 .ticket-btn {
   display: inline-block;
-  background: #cc1100;
+  background: var(--color-accent);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;

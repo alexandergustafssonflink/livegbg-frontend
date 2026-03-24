@@ -49,14 +49,14 @@ export default {
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 0.95;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin-bottom: 1.5rem;
 }
 
 .about-text {
   font-size: 1.125rem;
   line-height: 1.75;
-  color: #444;
+  color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
   max-width: 540px;
 }
@@ -65,13 +65,13 @@ export default {
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.05em;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .contact-link {
-  color: #cc1100;
+  color: var(--color-accent);
   text-decoration: none;
-  border-bottom: 1px solid #cc1100;
+  border-bottom: 1px solid var(--color-accent);
   transition: opacity 0.15s ease;
 }
 

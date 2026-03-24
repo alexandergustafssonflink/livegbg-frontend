@@ -96,14 +96,14 @@ export default {
 }
 
 .event-card:hover .event-title {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 .card-image-wrapper {
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background-color: #d0c9c0;
+  background-color: var(--color-image-placeholder);
 }
 
 .card-image {
@@ -130,7 +130,7 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1.2;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin-bottom: 0.35rem;
   transition: color 0.2s ease;
 }
@@ -140,13 +140,13 @@ export default {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--color-text-muted);
   margin-bottom: 0.35rem;
 }
 
 .event-description {
   font-size: 0.8rem;
-  color: #777;
+  color: var(--color-text-secondary);
   font-style: italic;
   line-height: 1.45;
   display: -webkit-box;
@@ -162,7 +162,7 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 0.6rem 0.25rem;
-  border-bottom: 1px solid #e0d9d0;
+  border-bottom: 1px solid var(--color-border);
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -172,7 +172,7 @@ export default {
 }
 
 .event-row:hover .row-title {
-  color: #cc1100;
+  color: var(--color-accent);
 }
 
 .row-meta {
@@ -180,7 +180,7 @@ export default {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
@@ -190,7 +190,7 @@ export default {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: #1a1a1a;
+  color: var(--color-text);
   transition: color 0.15s ease;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -202,7 +202,7 @@ export default {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--color-text-faint);
   text-align: right;
   white-space: nowrap;
   overflow: hidden;
@@ -235,7 +235,7 @@ export default {
     text-align: left;
     margin-top: 0.15rem;
     font-size: 0.65rem;
-    color: #aaa;
+    color: var(--color-text-faint);
   }
 }
 </style>

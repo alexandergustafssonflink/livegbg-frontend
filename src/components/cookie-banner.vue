@@ -3,7 +3,6 @@
     <div class="cookie-banner__inner">
       <p class="cookie-banner__text">
         Vi använder cookies för att förbättra din upplevelse och analysera trafik på webbplatsen.
-        <a href="/about" class="cookie-banner__link">Läs mer</a>
       </p>
       <button class="cookie-banner__btn" @click="accept">Acceptera</button>
     </div>

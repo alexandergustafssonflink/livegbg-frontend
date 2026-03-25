@@ -90,9 +90,17 @@ export default {
   will-change: transform;
 }
 
-.event-card:hover {
-  transform: rotate(2deg) translateY(-8px);
-  box-shadow: 6px 14px 28px rgba(0, 0, 0, 0.13);
+@media (min-width: 701px) {
+  .event-card:hover {
+    transform: rotate(2deg) translateY(-8px);
+    box-shadow: 6px 14px 28px rgba(0, 0, 0, 0.13);
+  }
+}
+
+@media (max-width: 700px) {
+  .event-card:hover {
+    transform: none;
+  }
 }
 
 .event-card:hover .event-title {

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar" :class="{ scrolled: isScrolled }">
     <div class="navbar-inner">
       <router-link to="/" class="logo">
         <img src="@/assets/logo-2.png" alt="LIVEGBG" class="logo-image" />
@@ -66,7 +66,7 @@
     </button>
 
     <!-- Mobile menu overlay -->
-    <div class="mobile-menu" :class="{ show: navActive }">
+    <div class="mobile-menu" :class="{ show: navActive, scrolled: isScrolled }">
       <router-link class="mobile-link" to="/" @click="navActive = false">Event</router-link>
       <router-link class="mobile-link" to="/about" @click="navActive = false">Om oss</router-link>
       <router-link class="mobile-link" to="/for-organizers" @click="navActive = false"
@@ -106,7 +106,14 @@ export default {
   data() {
     return {
       navActive: false,
+      isScrolled: false,
     };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
     isLoggedIn() {
@@ -123,6 +130,14 @@ export default {
       checkLoginStatus();
       this.$router.push("/login");
     },
+    handleScroll() {
+      if (this._scrollPending) return;
+      this._scrollPending = true;
+      requestAnimationFrame(() => {
+        this.isScrolled = window.scrollY > 10;
+        this._scrollPending = false;
+      });
+    },
   },
 };
 </script>
@@ -138,7 +153,7 @@ export default {
   height: 84px;
   display: flex;
   align-items: center;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: height 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .navbar-inner {
@@ -161,6 +176,7 @@ export default {
   height: 72px;
   width: auto;
   object-fit: contain;
+  transition: height 0.3s ease;
 }
 
 .nav-links {
@@ -261,7 +277,7 @@ export default {
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 64px;
+  top: 76px;
   left: 0;
   right: 0;
   background-color: var(--color-bg);
@@ -270,7 +286,11 @@ export default {
   padding: 1.5rem 2rem;
   gap: 1.25rem;
   z-index: 99;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, top 0.3s ease;
+}
+
+.mobile-menu.scrolled {
+  top: 54px;
 }
 
 .mobile-menu.show {
@@ -325,11 +345,19 @@ export default {
   }
 
   .navbar {
-    height: 60px;
+    height: 76px;
   }
 
   .logo-image {
+    height: 64px;
+  }
+
+  .navbar.scrolled {
     height: 54px;
+  }
+
+  .navbar.scrolled .logo-image {
+    height: 40px;
   }
 }
 </style>

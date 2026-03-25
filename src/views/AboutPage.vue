@@ -81,12 +81,36 @@ export default {
   justify-self: end;
   border-radius: 50%;
   border: 2px solid color-mix(in srgb, var(--color-text) 24%, transparent);
+  box-shadow: 0 14px 28px color-mix(in srgb, #000 24%, transparent);
   background: linear-gradient(
     135deg,
     color-mix(in srgb, var(--color-accent) 14%, transparent),
     color-mix(in srgb, var(--color-text) 8%, transparent)
   );
   overflow: hidden;
+}
+
+.founder-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, #fff 10%, transparent) 0,
+      color-mix(in srgb, #fff 10%, transparent) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, #c9a86a 20%, transparent),
+      transparent 60%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .founder-card::after {
@@ -96,7 +120,7 @@ export default {
   border-radius: 50%;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, #000 36%, transparent),
+    color-mix(in srgb, #3b2a12 34%, transparent),
     transparent 50%
   );
   pointer-events: none;
@@ -108,7 +132,8 @@ export default {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  filter: grayscale(12%) contrast(1.06) saturate(0.88) sepia(10%);
+  filter: sepia(34%) saturate(0.78) contrast(0.92) brightness(1.05)
+    hue-rotate(-10deg) grayscale(6%);
   transform: scale(1.03);
 }
 

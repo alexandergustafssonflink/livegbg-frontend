@@ -1,5 +1,6 @@
 import Home from "@/views/HomePage.vue";
 import About from "@/views/AboutPage.vue";
+import ForOrganizers from "@/views/ForOrganizersPage.vue";
 import Admin from "@/views/AdminPage.vue";
 import Login from "@/views/Login.vue";
 import { isLoggedIn } from "@/utils/auth.js";
@@ -14,6 +15,11 @@ const routes = [
     path: "/about",
     name: "about",
     component: About,
+  },
+  {
+    path: "/for-organizers",
+    name: "for-organizers",
+    component: ForOrganizers,
   },
   {
     path: "/admin",

@@ -12,6 +12,12 @@
           >Om LiveGBG</router-link
         >
         <router-link
+          to="/for-organizers"
+          class="nav-link"
+          :class="{ active: $route.path === '/for-organizers' }"
+          >För arrangörer</router-link
+        >
+        <router-link
           v-if="isLoggedIn"
           to="/admin"
           class="nav-link"
@@ -63,6 +69,9 @@
     <div class="mobile-menu" :class="{ show: navActive }">
       <router-link class="mobile-link" to="/" @click="navActive = false">Event</router-link>
       <router-link class="mobile-link" to="/about" @click="navActive = false">Om oss</router-link>
+      <router-link class="mobile-link" to="/for-organizers" @click="navActive = false"
+        >För arrangörer</router-link
+      >
       <button
         class="mobile-theme-toggle"
         @click="toggleDarkMode"

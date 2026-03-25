@@ -9,7 +9,7 @@
           >Event</router-link
         >
         <router-link to="/about" class="nav-link" :class="{ active: $route.path === '/about' }"
-          >Om oss</router-link
+          >Om LiveGBG</router-link
         >
         <router-link
           v-if="isLoggedIn"

@@ -1,14 +1,14 @@
 <template>
   <div class="about-page">
     <div class="about-content">
-      <h1 class="about-title">OM OSS</h1>
+      <h1 class="about-title">OM LIVEGBG</h1>
       <p class="about-text">
-        Göteborg har en fantastisk livescene och vårt uppdrag är att göra den
+        Göteborg har en fantastisk livescene och LiveGBG:s uppdrag är att göra den
         lite mer tillgänglig.
       </p>
       <p class="about-text">
-        Jag som driver LiveGBG heter Alexander Gustafsson Flink och jag älskar
-        Göteborgs livescen som jag tycker håller absolut världsklass. Jag har
+        Jag som driver LiveGBG heter Alexander och jag älskar
+        Göteborgs livescen. Jag har
         drivit denna sida sedan 2022 och har som mål att den ska få fler att
         upptäcka livemusik i Göteborg.
       </p>
@@ -32,6 +32,13 @@
         >
       </p>
     </div>
+    <figure class="founder-card">
+      <img
+        :src="founderImage"
+        alt="Alexander, grundare av LiveGBG"
+        class="founder-image"
+      />
+    </figure>
   </div>
 </template>
 
@@ -41,7 +48,9 @@ export default {
   components: {},
   methods: {},
   data() {
-    return {};
+    return {
+      founderImage: require("@/assets/founder.jpg"),
+    };
   },
   created() {},
 };
@@ -49,16 +58,58 @@ export default {
 
 <style scoped>
 .about-page {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 4rem 2rem;
   min-height: 80vh;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(260px, 360px);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: center;
 }
 
 .about-content {
   max-width: 620px;
+}
+
+.founder-card {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: min(100%, 330px);
+  aspect-ratio: 1 / 1;
+  justify-self: end;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-text) 24%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 14%, transparent),
+    color-mix(in srgb, var(--color-text) 8%, transparent)
+  );
+  overflow: hidden;
+}
+
+.founder-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, #000 36%, transparent),
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.founder-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: grayscale(12%) contrast(1.06) saturate(0.88) sepia(10%);
+  transform: scale(1.03);
 }
 
 .about-title {
@@ -122,6 +173,20 @@ export default {
 
 .contact-link:hover {
   opacity: 0.7;
+}
+
+@media (max-width: 700px) {
+  .about-page {
+    padding: 3rem 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .founder-card {
+    width: min(72vw, 300px);
+    justify-self: center;
+  }
 }
 </style>
 

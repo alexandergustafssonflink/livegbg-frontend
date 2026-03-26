@@ -7,7 +7,7 @@
   </div>
 
   <!-- Normal card mode -->
-  <div v-else class="event-card" @click="handleCardClick">
+  <div v-else ref="card" class="event-card" :class="{ 'is-focused': isFocused }" @click="handleCardClick">
     <div class="card-image-wrapper">
       <img
         v-if="event.place === 'Valand'"
@@ -45,6 +45,27 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      isFocused: false,
+    };
+  },
+  mounted() {
+    if (!this.compact && this.$refs.card) {
+      this.intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          this.isFocused = entries[0].isIntersecting;
+        },
+        { threshold: 0.5 }
+      );
+      this.intersectionObserver.observe(this.$refs.card);
+    }
+  },
+  beforeUnmount() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
   },
   computed: {
     formattedDate() {
@@ -244,6 +265,27 @@ export default {
     margin-top: 0.15rem;
     font-size: 0.65rem;
     color: var(--color-text-faint);
+  }
+}
+
+/* ── Mobile focus state ── */
+@media (max-width: 700px) {
+  /* Remove hover-triggered color changes on mobile */
+  .event-card:hover .event-title {
+    color: var(--color-text);
+  }
+
+  .event-card:hover .card-image {
+    filter: grayscale(100%);
+  }
+
+  /* Card currently in view gets colored image and accent title */
+  .event-card.is-focused .card-image {
+    filter: grayscale(0%);
+  }
+
+  .event-card.is-focused .event-title {
+    color: var(--color-accent);
   }
 }
 </style>
